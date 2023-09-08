@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<body>
+<h1>hello world</h1>
+<button id = "get-name">what's your name?</button>
+
+<div id = "name-field">
+
+</div>
+
+<script>
+    const nameField = document.getElementById("name-field")
+    let getNameButton = document.getElementById("get-name");
+    const url = "http://122.46.30.213:8080/api/name";
+
+    getNameButton.addEventListener("click", async function (){
+
+        $.ajax({
+            type : 'get',
+            url : url,
+            async : true,
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            success : function(result) {
+                console.log(result.name);
+                nameField.innerText = result.name;
+            },
+            error : function(request, status, error) {
+                console.log(error)
+            }
+
+        })
+    })
+
+</script>
+
+
+</body>
+</html>
