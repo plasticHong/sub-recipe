@@ -1,4 +1,4 @@
-package com.example.config;
+package com.subway.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -15,7 +15,7 @@ public class Swagger {
         return new OpenAPI()
                 .components(new Components())
                 .info(new Info().title("my API")
-                        .description("프로젝트 API 명세서입니다.")
+                        .description("sub-recipe API 명세서입니다.")
                         .version(springdocVersion));
     }
 }
