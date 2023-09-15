@@ -3,10 +3,15 @@ package com.subway.controller;
 import com.subway.dto.LoginResponse;
 import com.subway.dto.Request.LoginRequest;
 import com.subway.dto.Request.MemberJoinRequest;
+import com.subway.dto.Request.TokenRefreshRequest;
+import com.subway.dto.TokenRefreshResponse;
 import com.subway.sevice.JoinService;
-import com.subway.sevice.LoginService;
+import com.subway.sevice.UserAuthenticationService;
+import com.subway.sevice.MemberInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +27,21 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class MemberApi {
 
-    private final LoginService loginService;
+    private final UserAuthenticationService userAuthService;
     private final JoinService joinService;
+    private final MemberInfoService memberInfoService;
+
+    @Operation(summary = "내 닉네임 (need authentication)", description = """
+            # - 임시
+            # - 토큰 첨부 필요 Authorization 헤더, grantType : Bearer
+            """)
+    @RequestMapping(method = RequestMethod.GET, value = "/nickname/{userId}")
+    public ResponseEntity<?> myNickName(@PathVariable("userId") String userId) {
+
+        String nickName = memberInfoService.getUserNickName(userId);
+
+        return new ResponseEntity<>(nickName,HttpStatus.OK);
+    }
 
     @Operation(summary = "아이디 중복 체크", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/id-check")
@@ -45,7 +63,6 @@ public class MemberApi {
     @RequestMapping(method = RequestMethod.POST, value = "/join")
     public ResponseEntity<?> join(@RequestBody MemberJoinRequest joinRequest) {
 
-        System.out.println("join");
         joinService.join(joinRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -53,13 +70,13 @@ public class MemberApi {
 
     @Operation(summary = "로그인", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse servletResponse) {
 
         HashMap<Object, Object> res = new HashMap<>();
 
         try {
 
-            LoginResponse token = loginService.login(loginRequest);
+            LoginResponse token = userAuthService.login(loginRequest);
 
             if (token == null){
 
@@ -67,7 +84,13 @@ public class MemberApi {
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
-            return new ResponseEntity<>(token, HttpStatus.OK);
+            Cookie accessTokenCookie = makeCookie("accessToken",token.getAccessToken());
+            Cookie refreshTokenCookie = makeCookie("refreshToken",token.getRefreshToken());
+
+            servletResponse.addCookie(accessTokenCookie);
+            servletResponse.addCookie(refreshTokenCookie);
+
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e) {
             res.put("message", "wrong userId");
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
@@ -75,6 +98,37 @@ public class MemberApi {
 
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/refresh")
+    public ResponseEntity<?> validateRefreshToken(@RequestBody TokenRefreshRequest req, HttpServletResponse servletResponse) {
 
+        try {
+
+            TokenRefreshResponse token = userAuthService.validateRefreshToken(req.getRefreshToken());
+
+            if (token == null) {
+                return new ResponseEntity<>("token is expired", HttpStatus.FORBIDDEN);
+            }
+            Cookie accessTokenCookie = makeCookie("accessToken",token.getAccessToken());
+            Cookie refreshTokenCookie = makeCookie("refreshToken",token.getRefreshToken());
+
+            servletResponse.addCookie(accessTokenCookie);
+            servletResponse.addCookie(refreshTokenCookie);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (NoSuchElementException e) {
+
+            return new ResponseEntity<>("invalid token", HttpStatus.FORBIDDEN);
+        }
+
+    }
+
+    public Cookie makeCookie(String name, String value) {
+        Cookie cookie = new Cookie(name,value);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(60*60*24*7);
+
+        return cookie;
+    }
 
 }

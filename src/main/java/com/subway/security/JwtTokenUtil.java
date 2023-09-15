@@ -153,7 +153,6 @@ public class JwtTokenUtil {
         // refresh 객체에서 refreshToken 추출
         String refreshToken = refreshTokenObj.getRefreshToken();
 
-
         try {
             // 검증
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken);
@@ -161,20 +160,9 @@ public class JwtTokenUtil {
             //refresh 토큰의 만료시간이 지나지 않았을 경우, 새로운 access 토큰을 생성합니다.
             if (!claims.getBody().getExpiration().before(new Date())) {
                 String id = claims.getBody().get("id").toString();
-                String auth = claims.getBody().get("auth").toString();
                 String nickName = claims.getBody().get("nickName").toString();
 
-                String authType = null;
-                String managerName = null;
-
-                if (claims.getBody().get("authType") != null) {
-                    authType = claims.getBody().get("authType").toString();
-                }
-                if (claims.getBody().get("managerName") != null) {
-                    managerName = claims.getBody().get("managerName").toString();
-                }
-
-                return reCreationToken(id, auth, authType, managerName,nickName);
+                return reCreationToken(id, nickName);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,36 +177,13 @@ public class JwtTokenUtil {
         return Integer.parseInt(strNum);
     }
 
-    public TokenRefreshResponse reCreationToken(String id, String auth, String authType, String managerName,String nickName) {
+    public TokenRefreshResponse reCreationToken(String id,String nickName) {
         Date issuedAt = new Date();
         long now = (issuedAt).getTime();
 
         final Date accessTokenExpiredTime = new Date(now + HALF_HOUR);
         final Date refreshTokenExpiredTime = new Date(now + ONE_MONTH);
 
-        if(auth.contains("ADMIN")){
-            String accessToken = Jwts.builder()
-                    .setSubject(id)
-                    .claim("id", toInt(id))
-                    .claim("auth", auth)
-                    .claim("authType", toInt(authType))
-                    .claim("managerName", managerName)
-                    .setIssuedAt(issuedAt) // 토큰 발행 시간 정보
-                    .setExpiration(accessTokenExpiredTime) // set Expire Time
-                    .signWith(key, SignatureAlgorithm.HS256)
-                    .compact();
-            String refreshToken = Jwts.builder()
-                    .claim("id", toInt(id))
-                    .claim("auth", auth)
-                    .claim("authType", toInt(authType))
-                    .claim("managerName", managerName)
-                    .setIssuedAt(issuedAt)
-                    .setExpiration(refreshTokenExpiredTime)
-                    .signWith(key, SignatureAlgorithm.HS256)
-                    .compact();
-
-            return  new TokenRefreshResponse(accessToken,refreshToken);
-        }
         String refreshToken = Jwts.builder()
                 .claim("id", toInt(id))
                 .claim("auth", "ROLE_USER")

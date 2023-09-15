@@ -1,7 +1,6 @@
 package com.subway.security;
 
 import com.subway.config.CustomServletRequest;
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

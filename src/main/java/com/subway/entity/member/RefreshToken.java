@@ -1,9 +1,6 @@
 package com.subway.entity.member;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +15,12 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
 
     @Id
-    @Column(name = "KEY_EMAIL", nullable = false)
-    private String keyEmail;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
 
-    @Column(name = "REFRESH_TOKEN", nullable = false)
+    @Column(name = "user_id")
+    private String userId;
+
+    @Column(name = "REFRESH_TOKEN")
     private String refreshToken;
 }
