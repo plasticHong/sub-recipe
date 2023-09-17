@@ -2,6 +2,8 @@ package com.subway.security;
 
 import com.subway.dto.LoginResponse;
 import com.subway.dto.TokenRefreshResponse;
+import com.subway.dto.response.MemberInfo;
+import com.subway.entity.member.Member;
 import com.subway.entity.member.RefreshToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -86,16 +88,25 @@ public class JwtTokenUtil {
     }
 
 
-    public Map<String, String> getUserInfoFromToken(String Authorization) {
+    public MemberInfo getUserInfoFromToken(String Authorization) {
 
         String accessToken = getAccessToken(Authorization);
 
+        boolean validateToken = validateToken(accessToken);
+        if(!validateToken){
+            throw new JwtException("JwtException");
+        }
+
         Claims claims = parseClaims(accessToken);
 
-        Map<String, String> userInfo = new HashMap<>();
-        userInfo.put("userid", claims.get("userId").toString());
+        MemberInfo memberInfo = new MemberInfo();
+        Long id = Long.parseLong(claims.get("id").toString());
+        String nickName = claims.get("nickName").toString();
 
-        return userInfo;
+        memberInfo.setId(id);
+        memberInfo.setNickName(nickName);
+
+        return memberInfo;
     }
 
     public Authentication getAuthentication(String accessToken) {
@@ -123,8 +134,8 @@ public class JwtTokenUtil {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException ignore) {
-//            log.info("Expired JWT Token", e);
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token", e);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {

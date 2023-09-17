@@ -1,16 +1,20 @@
 package com.subway.controller;
 
 import com.subway.dto.LoginResponse;
+import com.subway.dto.Message;
 import com.subway.dto.Request.LoginRequest;
 import com.subway.dto.Request.MemberJoinRequest;
 import com.subway.dto.Request.TokenRefreshRequest;
 import com.subway.dto.TokenRefreshResponse;
+import com.subway.dto.response.MemberInfo;
 import com.subway.sevice.JoinService;
 import com.subway.sevice.UserAuthenticationService;
 import com.subway.sevice.MemberInfoService;
+import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -32,16 +36,28 @@ public class MemberApi {
     private final JoinService joinService;
     private final MemberInfoService memberInfoService;
 
-    @Operation(summary = "내 닉네임 (need authentication)", description = """
-            # - 임시
-            # - 토큰 첨부 필요 Authorization 헤더, grantType : Bearer
+    @Operation(summary = "내 정보 (need authentication)", description = """
+            #parameter - 토큰 첨부 필요 Authorization 헤더, grantType : Bearer
+            
+            <hr>
+            
+            #return 
+            - id(Long) : PK
+            - nickName(String) : nickName
             """)
-    @RequestMapping(method = RequestMethod.GET, value = "/nickname/{userId}")
-    public ResponseEntity<?> myNickName(@PathVariable("userId") String userId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/my-info")
+    public ResponseEntity<?> myInfo(HttpServletRequest req) {
 
-        String nickName = memberInfoService.getUserNickName(userId);
+        String authorization = req.getHeader("Authorization");
+        MemberInfo memberInfo;
 
-        return new ResponseEntity<>(nickName, HttpStatus.OK);
+        try{
+            memberInfo = memberInfoService.resolveAccessToken(authorization);
+        }catch (JwtException e){
+            return new ResponseEntity<>(new Message(e.getMessage()), HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>(memberInfo, HttpStatus.OK);
     }
 
     @Operation(summary = "아이디 중복 체크", description = "")
