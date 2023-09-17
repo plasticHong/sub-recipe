@@ -85,10 +85,10 @@ public class MemberApi {
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
-            addCookie(servletResponse, "accessToken", token.getAccessToken());
-            addCookie(servletResponse, "refreshToken", token.getRefreshToken());
+//            addCookie(servletResponse, "accessToken", token.getAccessToken());
+//            addCookie(servletResponse, "refreshToken", token.getRefreshToken());
 
-            return new ResponseEntity<>( HttpStatus.OK);
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             res.put("message", "wrong userId");
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
@@ -123,8 +123,8 @@ public class MemberApi {
     public static void addCookie(HttpServletResponse response, String name, String value) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .path("/")
-                .sameSite("None")
                 .httpOnly(false)
+                .sameSite("None")
                 .secure(true)
                 .maxAge(60 * 60 * 24 * 7)
                 .build();
