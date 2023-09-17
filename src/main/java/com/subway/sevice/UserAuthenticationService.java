@@ -57,7 +57,6 @@ public class UserAuthenticationService {
 
 //               리프레시 토큰 확인, DB에 있으면 삭제 후 save
         if (isExists) {
-            System.out.println("이미 있어요~");
             refreshTokenRepo.deleteByUserId(userId);
         }
 

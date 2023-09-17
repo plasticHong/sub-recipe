@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class MemberApi {
 
         String nickName = memberInfoService.getUserNickName(userId);
 
-        return new ResponseEntity<>(nickName,HttpStatus.OK);
+        return new ResponseEntity<>(nickName, HttpStatus.OK);
     }
 
     @Operation(summary = "아이디 중복 체크", description = "")
@@ -50,13 +51,13 @@ public class MemberApi {
         boolean isDuplicate = joinService.userIdDuplicateCheck(userId);
         HashMap<Object, Boolean> res = new HashMap<>();
 
-        if (isDuplicate){
+        if (isDuplicate) {
             res.put("duplicate", true);
-            return new ResponseEntity<>(res,HttpStatus.OK);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
 
         res.put("duplicate", false);
-        return new ResponseEntity<>(res,HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @Operation(summary = "회원가입", description = "")
@@ -78,19 +79,16 @@ public class MemberApi {
 
             LoginResponse token = userAuthService.login(loginRequest);
 
-            if (token == null){
+            if (token == null) {
 
                 res.put("message", "wrong password");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
-            Cookie accessTokenCookie = makeCookie("accessToken",token.getAccessToken());
-            Cookie refreshTokenCookie = makeCookie("refreshToken",token.getRefreshToken());
+            addCookie(servletResponse, "accessToken", token.getAccessToken());
+            addCookie(servletResponse, "refreshToken", token.getRefreshToken());
 
-            servletResponse.addCookie(accessTokenCookie);
-            servletResponse.addCookie(refreshTokenCookie);
-
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>( HttpStatus.OK);
         } catch (NoSuchElementException e) {
             res.put("message", "wrong userId");
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
@@ -108,11 +106,10 @@ public class MemberApi {
             if (token == null) {
                 return new ResponseEntity<>("token is expired", HttpStatus.FORBIDDEN);
             }
-            Cookie accessTokenCookie = makeCookie("accessToken",token.getAccessToken());
-            Cookie refreshTokenCookie = makeCookie("refreshToken",token.getRefreshToken());
 
-            servletResponse.addCookie(accessTokenCookie);
-            servletResponse.addCookie(refreshTokenCookie);
+            addCookie(servletResponse, "accessToken", token.getAccessToken());
+            addCookie(servletResponse, "refreshToken", token.getRefreshToken());
+
 
             return new ResponseEntity<>(HttpStatus.OK);
 
@@ -123,12 +120,17 @@ public class MemberApi {
 
     }
 
-    public Cookie makeCookie(String name, String value) {
-        Cookie cookie = new Cookie(name,value);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(60*60*24*7);
+    public static void addCookie(HttpServletResponse response, String name, String value) {
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .path("/")
+                .sameSite("None")
+                .httpOnly(false)
+                .secure(true)
+                .maxAge(60 * 60 * 24 * 7)
+                .build();
 
-        return cookie;
+        response.addHeader("Set-Cookie", cookie.toString());
     }
+
 
 }
