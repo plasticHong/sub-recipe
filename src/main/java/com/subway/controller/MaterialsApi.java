@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,36 +25,40 @@ public class MaterialsApi {
 
     @Operation(summary = "샌드위치 메뉴", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/sandwich-bases")
-    public ResponseEntity<?> getSandwichBase() {
+    public ResponseEntity<?> getSandwichBase(@RequestParam String sortOption,
+                                             @RequestParam String sortDirection) {
 
-        SandwichBaseResponse allSandwichBase = materialFindService.getAllSandwichBases();
+        SandwichBaseResponse allSandwichBase = materialFindService.getAllSandwichBases(sortOption,sortDirection);
 
         return new ResponseEntity<>(allSandwichBase,HttpStatus.OK);
     }
 
     @Operation(summary = "샌드위치 빵", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/breads")
-    public ResponseEntity<?> getBreads() {
+    public ResponseEntity<?> getBreads(@RequestParam String sortOption,
+                                       @RequestParam String sortDirection) {
 
-        BreadResponse allBread = materialFindService.getAllBreads();
+        BreadResponse allBread = materialFindService.getAllBreads(sortOption,sortDirection);
 
         return new ResponseEntity<>(allBread,HttpStatus.OK);
     }
 
     @Operation(summary = "추가옵션", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/extra-options")
-    public ResponseEntity<?> getExtraOptions() {
+    public ResponseEntity<?> getExtraOptions(@RequestParam String sortOption,
+                                             @RequestParam String sortDirection) {
 
-        ExtraOptionResponse allExtraOptions = materialFindService.getAllExtraOptions();
+        ExtraOptionResponse allExtraOptions = materialFindService.getAllExtraOptions(sortOption,sortDirection);
 
         return new ResponseEntity<>(allExtraOptions,HttpStatus.OK);
     }
 
     @Operation(summary = "치즈", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/cheeses")
-    public ResponseEntity<?> getCheeses() {
+    public ResponseEntity<?> getCheeses(@RequestParam String sortOption,
+                                        @RequestParam String sortDirection) {
 
-        CheeseResponse allCheeses = materialFindService.getAllCheeses();
+        CheeseResponse allCheeses = materialFindService.getAllCheeses(sortOption,sortDirection);
 
         return new ResponseEntity<>(allCheeses,HttpStatus.OK);
     }
