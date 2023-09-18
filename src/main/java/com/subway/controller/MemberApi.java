@@ -87,7 +87,7 @@ public class MemberApi {
 
     @Operation(summary = "로그인", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse servletResponse) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 
         HashMap<Object, Object> res = new HashMap<>();
 
@@ -101,9 +101,6 @@ public class MemberApi {
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
-//            addCookie(servletResponse, "accessToken", token.getAccessToken());
-//            addCookie(servletResponse, "refreshToken", token.getRefreshToken());
-
             return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             res.put("message", "wrong userId");
@@ -113,7 +110,7 @@ public class MemberApi {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/refresh")
-    public ResponseEntity<?> validateRefreshToken(@RequestBody TokenRefreshRequest req, HttpServletResponse servletResponse) {
+    public ResponseEntity<?> validateRefreshToken(@RequestBody TokenRefreshRequest req) {
 
         try {
 
@@ -123,29 +120,13 @@ public class MemberApi {
                 return new ResponseEntity<>("token is expired", HttpStatus.FORBIDDEN);
             }
 
-            addCookie(servletResponse, "accessToken", token.getAccessToken());
-            addCookie(servletResponse, "refreshToken", token.getRefreshToken());
-
-
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(token,HttpStatus.OK);
 
         } catch (NoSuchElementException e) {
 
             return new ResponseEntity<>("invalid token", HttpStatus.FORBIDDEN);
         }
 
-    }
-
-    public static void addCookie(HttpServletResponse response, String name, String value) {
-        ResponseCookie cookie = ResponseCookie.from(name, value)
-                .path("/")
-                .httpOnly(false)
-                .sameSite("None")
-                .secure(true)
-                .maxAge(60 * 60 * 24 * 7)
-                .build();
-
-        response.addHeader("Set-Cookie", cookie.toString());
     }
 
 
