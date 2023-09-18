@@ -1,6 +1,7 @@
 package com.subway.controller;
 
 import com.subway.dto.response.BreadResponse;
+import com.subway.dto.response.ExtraOptionResponse;
 import com.subway.dto.response.SandwichBaseResponse;
 import com.subway.sevice.MaterialFindService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +25,7 @@ public class MaterialsApi {
     @RequestMapping(method = RequestMethod.GET, value = "/sandwich-bases")
     public ResponseEntity<?> getSandwichBase() {
 
-        SandwichBaseResponse allSandwichBase = materialFindService.getAllSandwichBase();
+        SandwichBaseResponse allSandwichBase = materialFindService.getAllSandwichBases();
 
         return new ResponseEntity<>(allSandwichBase,HttpStatus.OK);
     }
@@ -33,10 +34,18 @@ public class MaterialsApi {
     @RequestMapping(method = RequestMethod.GET, value = "/breads")
     public ResponseEntity<?> getBreads() {
 
-        BreadResponse allBread = materialFindService.getAllBread();
+        BreadResponse allBread = materialFindService.getAllBreads();
 
         return new ResponseEntity<>(allBread,HttpStatus.OK);
     }
 
+    @Operation(summary = "추가옵션", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/extra-options")
+    public ResponseEntity<?> getExtraOptions() {
+
+        ExtraOptionResponse allExtraOptions = materialFindService.getAllExtraOptions();
+
+        return new ResponseEntity<>(allExtraOptions,HttpStatus.OK);
+    }
 
 }
