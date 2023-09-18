@@ -1,5 +1,6 @@
 package com.subway.controller;
 
+import com.subway.dto.response.BreadResponse;
 import com.subway.dto.response.SandwichBaseResponse;
 import com.subway.sevice.MaterialFindService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,12 +21,22 @@ public class MaterialsApi {
     private final MaterialFindService materialFindService;
 
     @Operation(summary = "샌드위치 메뉴", description = "")
-    @RequestMapping(method = RequestMethod.GET, value = "/sandwich-base")
+    @RequestMapping(method = RequestMethod.GET, value = "/sandwich-bases")
     public ResponseEntity<?> getSandwichBase() {
 
         SandwichBaseResponse allSandwichBase = materialFindService.getAllSandwichBase();
 
         return new ResponseEntity<>(allSandwichBase,HttpStatus.OK);
     }
+
+    @Operation(summary = "샌드위치 빵", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/breads")
+    public ResponseEntity<?> getBreads() {
+
+        BreadResponse allBread = materialFindService.getAllBread();
+
+        return new ResponseEntity<>(allBread,HttpStatus.OK);
+    }
+
 
 }

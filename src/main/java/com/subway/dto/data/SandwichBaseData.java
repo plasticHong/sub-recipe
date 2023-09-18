@@ -1,11 +1,9 @@
-package com.subway.dto.response;
+package com.subway.dto.data;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class SandwichBaseDTO {
+public class SandwichBaseData {
 
     private Long id;
 
