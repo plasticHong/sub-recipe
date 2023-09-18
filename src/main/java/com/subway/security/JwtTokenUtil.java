@@ -41,7 +41,7 @@ public class JwtTokenUtil {
 
     /**
      * 로그인 시 토큰 생성
-     * */
+     */
     public LoginResponse makeToken(Long id, String nickName) {
 
         long now = (new Date()).getTime();
@@ -93,9 +93,6 @@ public class JwtTokenUtil {
         String accessToken = getAccessToken(Authorization);
 
         boolean validateToken = validateToken(accessToken);
-        if(!validateToken){
-            throw new JwtException("JwtException");
-        }
 
         Claims claims = parseClaims(accessToken);
 
@@ -145,11 +142,7 @@ public class JwtTokenUtil {
     }
 
     private Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
     }
 
     public Integer getMemberIdByToken(String refreshToken) {
@@ -188,7 +181,7 @@ public class JwtTokenUtil {
         return Integer.parseInt(strNum);
     }
 
-    public TokenRefreshResponse reCreationToken(String id,String nickName) {
+    public TokenRefreshResponse reCreationToken(String id, String nickName) {
         Date issuedAt = new Date();
         long now = (issuedAt).getTime();
 
@@ -198,7 +191,7 @@ public class JwtTokenUtil {
         String refreshToken = Jwts.builder()
                 .claim("id", toInt(id))
                 .claim("auth", "ROLE_USER")
-                .claim("nickName",nickName)
+                .claim("nickName", nickName)
                 .setIssuedAt(issuedAt)
                 .setExpiration(refreshTokenExpiredTime)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -208,13 +201,13 @@ public class JwtTokenUtil {
                 .setSubject(id)
                 .claim("id", toInt(id))
                 .claim("auth", "ROLE_USER")
-                .claim("nickName",nickName)
+                .claim("nickName", nickName)
                 .setIssuedAt(new Date()) // 토큰 발행 시간 정보
                 .setExpiration(accessTokenExpiredTime) // set Expire Time
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
         return
-                new TokenRefreshResponse(accessToken,refreshToken);
+                new TokenRefreshResponse(accessToken, refreshToken);
 
     }
 

@@ -3,6 +3,8 @@ package com.subway.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Entity
@@ -101,4 +103,12 @@ public class Recipe {
 
     @Column(name = "respect_point")
     private Integer respectPoint;
+
+    @Column(name = "create_time")
+    private LocalDateTime createTime;
+
+    @PrePersist
+    public void onPrePersist() {
+        this.createTime = LocalDateTime.now();
+    }
 }

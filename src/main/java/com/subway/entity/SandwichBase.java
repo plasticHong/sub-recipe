@@ -13,10 +13,10 @@ public class SandwichBase {
     private Long id;
 
     @Column(name = "k_name")
-    private String KorName;
+    private String korName;
 
     @Column(name = "e_name")
-    private String EnName;
+    private String enName;
 
     @Column(name = "price")
     private Integer price;

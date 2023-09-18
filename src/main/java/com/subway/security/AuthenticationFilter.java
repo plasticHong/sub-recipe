@@ -1,6 +1,10 @@
 package com.subway.security;
 
 import com.subway.config.CustomServletRequest;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,15 +42,31 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-//          validateToken 으로 토큰 유효성 검사
-        if (tokenUtil.validateToken(token)) {
 
+//          validateToken 으로 토큰 유효성 검사
+        if (!tokenUtil.validateToken(token)) {
+            filterChain.doFilter(request,response);
+            return;
+        }
 //          토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
-            authentication = tokenUtil.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            try {
+
+                authentication = tokenUtil.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+                log.info("Invalid JWT Token", e);
+            } catch (ExpiredJwtException e) {
+                log.info("Expired JWT Token", e);
+                response.setStatus(401);
+            } catch (UnsupportedJwtException e) {
+                log.info("Unsupported JWT Token", e);
+            } catch (IllegalArgumentException e) {
+                log.info("JWT claims string is empty.", e);
+            }
 
 //          Authentication 정보와 함께 인증 요청(회원 OR 어드민) 로깅
-        }
 
         filterChain.doFilter(request,response);
     }
