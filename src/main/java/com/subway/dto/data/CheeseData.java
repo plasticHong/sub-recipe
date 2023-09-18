@@ -3,14 +3,11 @@ package com.subway.dto.data;
 import lombok.Getter;
 
 @Getter
-public class ExtraOptionData {
+public class CheeseData {
 
     private Long id;
     private String name;
-    private Integer price;
     private String image;
     private Double kcal;
-    private Double protein;
-    private Double fat;
 
 }

@@ -1,6 +1,7 @@
 package com.subway.controller;
 
 import com.subway.dto.response.BreadResponse;
+import com.subway.dto.response.CheeseResponse;
 import com.subway.dto.response.ExtraOptionResponse;
 import com.subway.dto.response.SandwichBaseResponse;
 import com.subway.sevice.MaterialFindService;
@@ -48,4 +49,12 @@ public class MaterialsApi {
         return new ResponseEntity<>(allExtraOptions,HttpStatus.OK);
     }
 
+    @Operation(summary = "치즈", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/cheeses")
+    public ResponseEntity<?> getCheeses() {
+
+        CheeseResponse allCheeses = materialFindService.getAllCheeses();
+
+        return new ResponseEntity<>(allCheeses,HttpStatus.OK);
+    }
 }
