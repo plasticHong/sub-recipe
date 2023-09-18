@@ -2,11 +2,13 @@ package com.subway.sevice;
 
 import com.subway.dto.response.SandwichBaseDTO;
 import com.subway.dto.response.SandwichBaseResponse;
+import com.subway.entity.SandwichBase;
+import com.subway.repository.materials.BreadRepo;
 import com.subway.repository.materials.SandwichBaseRepo;
+import com.subway.utils.ObjectMappingUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import java.util.List;
 
@@ -14,18 +16,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MaterialFindService {
 
+    private final ObjectMappingUtils mappingUtils;
     private final SandwichBaseRepo sandwichBaseRepo;
-    private final ModelMapper modelMapper;
+    private final BreadRepo breadRepo;
 
     public SandwichBaseResponse getAllSandwichBase() {
-//        entity -> dto
-        List<SandwichBaseDTO> SandwichBases = sandwichBaseRepo.findAll().stream()
-                .map(entity -> {
-                    return modelMapper.map(entity, SandwichBaseDTO.class);
-                })
-                .toList();
 
-        return new SandwichBaseResponse(SandwichBases);
+        List<SandwichBase> sandwichBaseList = sandwichBaseRepo.findAll();
+        List<SandwichBaseDTO> dtoList = mappingUtils.entityListToDtoList(sandwichBaseList, SandwichBaseDTO.class);
+
+        return new SandwichBaseResponse(dtoList);
     }
 
 }
