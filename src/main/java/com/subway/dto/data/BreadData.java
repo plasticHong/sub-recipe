@@ -13,4 +13,7 @@ public class BreadData {
 
     private Double kcal;
 
+    private Double protein;
+
+    private Double fat;
 }

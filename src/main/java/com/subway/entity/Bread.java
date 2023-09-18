@@ -21,4 +21,10 @@ public class Bread {
     @Column(name = "kcal")
     private Double kcal;
 
+    @Column(name = "protein")
+    private Double protein;
+
+    @Column(name = "fat")
+    private Double fat;
+
 }
