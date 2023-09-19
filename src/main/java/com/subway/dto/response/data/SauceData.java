@@ -1,15 +1,13 @@
-package com.subway.dto.data;
+package com.subway.dto.response.data;
 
 import lombok.Getter;
 
 @Getter
-public class VeggieData {
-    /**
-     * Veggie for except
-     * */
+public class SauceData {
 
     private Long id;
     private String name;
+    private String taste;
     private String image;
     private Double kcal;
 

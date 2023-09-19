@@ -1,4 +1,4 @@
-package com.subway.dto.data;
+package com.subway.dto.response.data;
 
 import lombok.Getter;
 

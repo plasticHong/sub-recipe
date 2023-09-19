@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class Swagger {
+public class SwaggerConfig {
 
     @Bean
     public OpenAPI springShopOpenAPI(@Value("${springdoc.version}") String springdocVersion) {

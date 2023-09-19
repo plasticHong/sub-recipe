@@ -1,4 +1,4 @@
-package com.subway.config;
+package com.subway.wrapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
