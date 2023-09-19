@@ -1,7 +1,6 @@
 package com.subway.dto.response;
 
-import com.subway.dto.data.SandwichBaseData;
-import lombok.AllArgsConstructor;
+import com.subway.dto.response.data.SandwichBaseData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

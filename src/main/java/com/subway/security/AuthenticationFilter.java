@@ -1,8 +1,7 @@
 package com.subway.security;
 
-import com.subway.config.CustomServletRequest;
+import com.subway.wrapper.CustomServletRequest;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;

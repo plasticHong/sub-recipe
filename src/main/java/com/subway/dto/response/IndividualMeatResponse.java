@@ -1,6 +1,6 @@
 package com.subway.dto.response;
 
-import com.subway.dto.data.IndividualMeatData;
+import com.subway.dto.response.data.IndividualMeatData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

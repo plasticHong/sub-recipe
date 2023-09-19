@@ -1,6 +1,6 @@
 package com.subway.dto.response;
 
-import com.subway.dto.data.ExtraOptionData;
+import com.subway.dto.response.data.ExtraOptionData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

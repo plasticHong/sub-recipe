@@ -1,6 +1,6 @@
 package com.subway.dto.response;
 
-import com.subway.dto.data.CheeseData;
+import com.subway.dto.response.data.CheeseData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
