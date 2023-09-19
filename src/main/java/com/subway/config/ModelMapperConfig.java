@@ -1,6 +1,6 @@
 package com.subway.config;
 
-import org.modelmapper.ModelMapper;
+import com.subway.wrapper.CustomMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Configuration;
 public class ModelMapperConfig {
 
     @Bean
-    public ModelMapper modelMapper(){
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
+    public CustomMapper customMapper(){
+        CustomMapper customMapper = new CustomMapper();
+        customMapper.getConfiguration()
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setFieldMatchingEnabled(true);
-        return modelMapper;
+        return customMapper;
     }
 
 }
