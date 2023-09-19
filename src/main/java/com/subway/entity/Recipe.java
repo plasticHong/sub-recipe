@@ -1,19 +1,29 @@
 package com.subway.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
 @Entity
 @Table(name = "recipe", schema = "sub-recipe")
+@NoArgsConstructor
+@ToString
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "member_id")
+    private Long memberId;
 
     @Column(name = "title")
     private String title;
@@ -25,8 +35,8 @@ public class Recipe {
     private String description;
 
     /*
-    * sandwichBase 기본 wheat(위트)
-    * */
+     * sandwichBase 기본 wheat(위트)
+     * */
     @Column(name = "bread_id")
     private Long breadId;
 
@@ -34,36 +44,36 @@ public class Recipe {
     private Long cheeseId;
 
     /*
-    * 제외 야채
-    * */
-    @Column(name = "exception_veggie_1")
-    private Long exceptionVeggie1;
+     * 제외 야채
+     * */
+    @Column(name = "veggie_1")
+    private Long veggie1;
 
-    @Column(name = "exception_veggie_2")
-    private Long exceptionVeggie2;
+    @Column(name = "veggie_2")
+    private Long veggie2;
 
-    @Column(name = "exception_veggie_3")
-    private Long exceptionVeggie3;
+    @Column(name = "veggie_3")
+    private Long veggie3;
 
-    @Column(name = "exception_veggie_4")
-    private Long exceptionVeggie4;
+    @Column(name = "veggie_4")
+    private Long veggie4;
 
-    @Column(name = "exception_veggie_5")
-    private Long exceptionVeggie5;
+    @Column(name = "veggie_5")
+    private Long veggie5;
 
-    @Column(name = "exception_veggie_6")
-    private Long exceptionVeggie6;
+    @Column(name = "veggie_6")
+    private Long veggie6;
 
-    @Column(name = "exception_veggie_7")
-    private Long exceptionVeggie7;
+    @Column(name = "veggie_7")
+    private Long veggie7;
 
-    @Column(name = "exception_veggie_8")
-    private Long exceptionVeggie8;
+    @Column(name = "veggie_8")
+    private Long veggie8;
 
     /*
-    * source
-    * maximum 3
-    * */
+     * source
+     * maximum 3
+     * */
     @Column(name = "sauce_1")
     private Long sauceId1;
 
@@ -73,18 +83,6 @@ public class Recipe {
     @Column(name = "sauce_3")
     private Long sauceId3;
 
-    /*
-    * 추가 토핑
-    * */
-    @Column(name = "extra_option_ids")
-    private String extraOptionIds;
-
-    /*
-     * individual meat(double up or extra meat)
-     * 더블업/미트 추가
-     * */
-    @Column(name = "individual_meat_ids")
-    private String individualMeatId;
 
     @Column(name = "total_price")
     private Integer total_price;
@@ -111,4 +109,78 @@ public class Recipe {
     public void onPrePersist() {
         this.createTime = LocalDateTime.now();
     }
+
+    @Builder
+    public Recipe(Long memberId, String title, Long sandwichBaseId, String description,
+                  Long breadId, Long cheeseId,
+                  Integer total_price, Double totalKcal, Double totalProtein, Double totalFat,
+                  List<Long> veggieIds, List<Long> sauceIds) {
+
+        this.memberId = memberId;
+        this.title = title;
+        this.sandwichBaseId = sandwichBaseId;
+        this.description = description;
+        this.breadId = breadId;
+        this.cheeseId = cheeseId;
+        this.total_price = total_price;
+        this.totalKcal = totalKcal;
+        this.totalProtein = totalProtein;
+        this.totalFat = totalFat;
+
+        setExceptionVeggies(veggieIds);
+        setSauces(sauceIds);
+    }
+
+    private void setExceptionVeggies(List<Long> veggieIds) {
+
+        int length = veggieIds.size();
+
+        this.veggie1 = veggieIds.get(0);
+        if (length < 2) {
+            return;
+        }
+        this.veggie2 = veggieIds.get(1);
+        if (length < 3) {
+            return;
+        }
+        this.veggie3 = veggieIds.get(2);
+        if (length < 4) {
+            return;
+        }
+        this.veggie4 = veggieIds.get(3);
+        if (length < 5) {
+            return;
+        }
+        this.veggie5 = veggieIds.get(4);
+        if (length < 6) {
+            return;
+        }
+        this.veggie6 = veggieIds.get(5);
+        if (length < 7) {
+            return;
+        }
+        this.veggie7 = veggieIds.get(6);
+        if (length < 8) {
+            return;
+        }
+        this.veggie8 = veggieIds.get(7);
+
+    }
+
+    private void setSauces(List<Long> sauceIds) {
+
+        int length = sauceIds.size();
+
+        this.sauceId1 = sauceIds.get(0);
+        if (length < 2) {
+            return;
+        }
+        this.sauceId2 = sauceIds.get(1);
+        if (length < 3) {
+            return;
+        }
+        this.sauceId3 = sauceIds.get(2);
+
+    }
+
 }
