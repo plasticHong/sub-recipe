@@ -1,7 +1,7 @@
 package com.subway.sevice;
 
 import com.subway.entity.Sauce;
-import com.subway.repository.SauceRepo;
+import com.subway.repository.material.SauceRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

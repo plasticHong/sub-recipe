@@ -39,4 +39,7 @@ public class SandwichBase {
     @Column(name = "default_description")
     private String defaultDescription;
 
+    @Column(name = "usage_point")
+    private Integer usagePoint;
+
 }

@@ -20,4 +20,7 @@ public class Cheese {
 
     @Column(name = "kcal")
     private Double kcal;
+
+    @Column(name = "usage_point")
+    private Integer usagePoint;
 }

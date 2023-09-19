@@ -29,4 +29,7 @@ public class ExtraOption {
 
     @Column(name = "fat")
     private Double fat;
+
+    @Column(name = "usage_point")
+    private Integer usagePoint;
 }

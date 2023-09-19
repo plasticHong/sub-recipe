@@ -3,7 +3,6 @@ package com.subway.sevice;
 import com.subway.dto.data.*;
 import com.subway.dto.response.*;
 import com.subway.entity.*;
-import com.subway.repository.SauceRepo;
 import com.subway.repository.material.*;
 import com.subway.utils.ObjectMappingUtils;
 import com.subway.utils.SortUtils;
@@ -13,7 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Service
