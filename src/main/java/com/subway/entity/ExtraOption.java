@@ -6,7 +6,7 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "extra_option", schema = "sub-recipe")
-public class ExtraOption {
+public class ExtraOption implements Usable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +32,10 @@ public class ExtraOption {
 
     @Column(name = "usage_point")
     private Integer usagePoint;
+
+    @Override
+    public void usablePointIncrease() {
+        this.usagePoint = usagePoint+1;
+    }
+
 }

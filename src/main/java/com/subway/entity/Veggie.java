@@ -6,7 +6,7 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "veggie", schema = "sub-recipe")
-public class Veggie {
+public class Veggie implements Usable{
 
     /**
      * Veggie for except
@@ -28,4 +28,8 @@ public class Veggie {
     @Column(name = "usage_point")
     private Integer usagePoint;
 
+    @Override
+    public void usablePointIncrease() {
+        this.usagePoint = usagePoint+1;
+    }
 }
