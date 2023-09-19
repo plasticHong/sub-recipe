@@ -1,4 +1,4 @@
-package com.subway.repository.materials;
+package com.subway.repository.material;
 
 import com.subway.entity.ExtraOption;
 import org.springframework.data.jpa.repository.JpaRepository;

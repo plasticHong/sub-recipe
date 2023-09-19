@@ -8,12 +8,20 @@ public class SortUtils {
 
     public Sort getSort(String sortOption, String sortDirection) {
 
+        if(sortOption == null){
+            return null;
+        }
+
         Sort sortBySortOption = getSortBySortOption(sortOption);
 
         return setSortDirection(sortBySortOption, sortDirection);
     }
 
     private Sort setSortDirection(Sort sort, String sortDirection) {
+
+        if (sortDirection==null){
+            return sort;
+        }
 
         if (sortDirection.trim().equalsIgnoreCase("DESC")) {
             return sort.reverse();

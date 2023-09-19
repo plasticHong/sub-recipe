@@ -1,9 +1,6 @@
 package com.subway.controller;
 
-import com.subway.dto.response.BreadResponse;
-import com.subway.dto.response.CheeseResponse;
-import com.subway.dto.response.ExtraOptionResponse;
-import com.subway.dto.response.SandwichBaseResponse;
+import com.subway.dto.response.*;
 import com.subway.sevice.MaterialFindService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,8 +22,8 @@ public class MaterialsApi {
 
     @Operation(summary = "샌드위치 메뉴", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/sandwich-bases")
-    public ResponseEntity<?> getSandwichBase(@RequestParam String sortOption,
-                                             @RequestParam String sortDirection) {
+    public ResponseEntity<?> getSandwichBase(@RequestParam(required = false) String sortOption,
+                                             @RequestParam(required = false) String sortDirection) {
 
         SandwichBaseResponse allSandwichBase = materialFindService.getAllSandwichBases(sortOption,sortDirection);
 
@@ -35,8 +32,8 @@ public class MaterialsApi {
 
     @Operation(summary = "샌드위치 빵", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/breads")
-    public ResponseEntity<?> getBreads(@RequestParam String sortOption,
-                                       @RequestParam String sortDirection) {
+    public ResponseEntity<?> getBreads(@RequestParam(required = false) String sortOption,
+                                       @RequestParam(required = false) String sortDirection) {
 
         BreadResponse allBread = materialFindService.getAllBreads(sortOption,sortDirection);
 
@@ -45,8 +42,8 @@ public class MaterialsApi {
 
     @Operation(summary = "추가옵션", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/extra-options")
-    public ResponseEntity<?> getExtraOptions(@RequestParam String sortOption,
-                                             @RequestParam String sortDirection) {
+    public ResponseEntity<?> getExtraOptions(@RequestParam(required = false) String sortOption,
+                                             @RequestParam(required = false) String sortDirection) {
 
         ExtraOptionResponse allExtraOptions = materialFindService.getAllExtraOptions(sortOption,sortDirection);
 
@@ -55,11 +52,42 @@ public class MaterialsApi {
 
     @Operation(summary = "치즈", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/cheeses")
-    public ResponseEntity<?> getCheeses(@RequestParam String sortOption,
-                                        @RequestParam String sortDirection) {
+    public ResponseEntity<?> getCheeses(@RequestParam(required = false) String sortOption,
+                                        @RequestParam(required = false) String sortDirection) {
 
         CheeseResponse allCheeses = materialFindService.getAllCheeses(sortOption,sortDirection);
 
         return new ResponseEntity<>(allCheeses,HttpStatus.OK);
     }
+
+    @Operation(summary = "더블업/미트 추가", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/individual-meats")
+    public ResponseEntity<?> getIndividualMeats(@RequestParam(required = false) String sortOption,
+                                                @RequestParam(required = false) String sortDirection) {
+
+        IndividualMeatResponse allIndividualMeats = materialFindService.getAllIndividualMeats(sortOption, sortDirection);
+
+        return new ResponseEntity<>(allIndividualMeats,HttpStatus.OK);
+    }
+
+    @Operation(summary = "야채", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/veggies")
+    public ResponseEntity<?> getVeggies(@RequestParam(required = false) String sortOption,
+                                        @RequestParam(required = false) String sortDirection) {
+
+        VeggieResponse allVeggies = materialFindService.getAllVeggies(sortOption, sortDirection);
+
+        return new ResponseEntity<>(allVeggies,HttpStatus.OK);
+    }
+
+    @Operation(summary = "소스", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/sauces")
+    public ResponseEntity<?> getSauces(@RequestParam(required = false) String sortOption,
+                                       @RequestParam(required = false) String sortDirection) {
+
+        SauceResponse allSauces = materialFindService.getAllSauces(sortOption, sortDirection);
+
+        return new ResponseEntity<>(allSauces,HttpStatus.OK);
+    }
+
 }
