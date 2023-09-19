@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Service
@@ -30,79 +31,9 @@ public class MaterialFindService {
     private final VeggieRepo veggieRepo;
     private final SauceRepo sauceRepo;
 
-    public SauceResponse getAllSauces(String sortOption, String sortDirection) {
+    public <T> List<T> findAllEntitiesWithSort(JpaRepository<T,?> repository, String sortOption, String sortDirection){
 
         Sort sort = sortUtils.getSort(sortOption, sortDirection);
-
-        List<Sauce> sauceList = findAllEntitiesWithSort(sauceRepo, sort);
-        List<SauceData> sauceDataList = mappingUtils.entityListToDtoList(sauceList, SauceData.class);
-
-        return new SauceResponse(sauceDataList);
-    }
-
-    public VeggieResponse getAllVeggies(String sortOption, String sortDirection) {
-
-        Sort sort = sortUtils.getSort(sortOption, sortDirection);
-
-        List<Veggie> veggieList = findAllEntitiesWithSort(veggieRepo, sort);
-        List<VeggieData> veggieDataList = mappingUtils.entityListToDtoList(veggieList, VeggieData.class);
-
-        return new VeggieResponse(veggieDataList);
-    }
-
-    public IndividualMeatResponse getAllIndividualMeats(String sortOption, String sortDirection) {
-
-        Sort sort = sortUtils.getSort(sortOption, sortDirection);
-
-        List<IndividualMeat> IndividualMeatList = findAllEntitiesWithSort(individualMeatRepo, sort);
-        List<IndividualMeatData> IndividualMeatDataList = mappingUtils.entityListToDtoList(IndividualMeatList, IndividualMeatData.class);
-
-        return new IndividualMeatResponse(IndividualMeatDataList);
-    }
-
-    public CheeseResponse getAllCheeses(String sortOption, String sortDirection) {
-
-        Sort sort = sortUtils.getSort(sortOption, sortDirection);
-
-        List<Cheese> cheeseList = findAllEntitiesWithSort(cheeseRepo, sort);
-        List<CheeseData> cheeseDataList = mappingUtils.entityListToDtoList(cheeseList, CheeseData.class);
-
-        return new CheeseResponse(cheeseDataList);
-    }
-
-    public ExtraOptionResponse getAllExtraOptions(String sortOption, String sortDirection) {
-
-        Sort sort = sortUtils.getSort(sortOption, sortDirection);
-
-        List<ExtraOption> extraOptionList = findAllEntitiesWithSort(extraOptionRepo, sort);
-        List<ExtraOptionData> extraOptionDataList = mappingUtils.entityListToDtoList(extraOptionList, ExtraOptionData.class);
-
-        return new ExtraOptionResponse(extraOptionDataList);
-    }
-
-    public SandwichBaseResponse getAllSandwichBases(String sortOption, String sortDirection) {
-
-        Sort sort = sortUtils.getSort(sortOption, sortDirection);
-
-        List<SandwichBase> sandwichBaseList = findAllEntitiesWithSort(sandwichBaseRepo, sort);
-        List<SandwichBaseData> dtoList = mappingUtils.entityListToDtoList(sandwichBaseList, SandwichBaseData.class);
-
-        return new SandwichBaseResponse(dtoList);
-    }
-
-
-    public BreadResponse getAllBreads(String sortOption, String sortDirection) {
-
-        Sort sort = sortUtils.getSort(sortOption, sortDirection);
-
-        List<Bread> breadList = findAllEntitiesWithSort(breadRepo, sort);
-        List<BreadData> breadDataList = mappingUtils.entityListToDtoList(breadList, BreadData.class);
-
-        return new BreadResponse(breadDataList);
-    }
-
-    public <T,ID> List<T> findAllEntitiesWithSort(JpaRepository<T,ID> repository, Sort sort){
-
         List<T> entityList;
 
         if(sort == null){
@@ -116,6 +47,63 @@ public class MaterialFindService {
         }
 
         return entityList;
+    }
+
+    public SauceResponse getAllSauces(String sortOption, String sortDirection) {
+
+        List<Sauce> sauceList = findAllEntitiesWithSort(sauceRepo, sortOption, sortDirection);
+        List<SauceData> sauceDataList = mappingUtils.entityListToDtoList(sauceList, SauceData.class);
+
+        return new SauceResponse(sauceDataList);
+    }
+
+    public VeggieResponse getAllVeggies(String sortOption, String sortDirection) {
+
+        List<Veggie> veggieList = findAllEntitiesWithSort(veggieRepo, sortOption, sortDirection);
+        List<VeggieData> veggieDataList = mappingUtils.entityListToDtoList(veggieList, VeggieData.class);
+
+        return new VeggieResponse(veggieDataList);
+    }
+
+    public IndividualMeatResponse getAllIndividualMeats(String sortOption, String sortDirection) {
+
+        List<IndividualMeat> IndividualMeatList = findAllEntitiesWithSort(individualMeatRepo, sortOption, sortDirection);
+        List<IndividualMeatData> IndividualMeatDataList = mappingUtils.entityListToDtoList(IndividualMeatList, IndividualMeatData.class);
+
+        return new IndividualMeatResponse(IndividualMeatDataList);
+    }
+
+    public CheeseResponse getAllCheeses(String sortOption, String sortDirection) {
+
+        List<Cheese> cheeseList = findAllEntitiesWithSort(cheeseRepo, sortOption, sortDirection);
+        List<CheeseData> cheeseDataList = mappingUtils.entityListToDtoList(cheeseList, CheeseData.class);
+
+        return new CheeseResponse(cheeseDataList);
+    }
+
+    public ExtraOptionResponse getAllExtraOptions(String sortOption, String sortDirection) {
+
+        List<ExtraOption> extraOptionList = findAllEntitiesWithSort(extraOptionRepo, sortOption, sortDirection);
+        List<ExtraOptionData> extraOptionDataList = mappingUtils.entityListToDtoList(extraOptionList, ExtraOptionData.class);
+
+        return new ExtraOptionResponse(extraOptionDataList);
+    }
+
+    public SandwichBaseResponse getAllSandwichBases(String sortOption, String sortDirection) {
+
+        List<SandwichBase> sandwichBaseList = findAllEntitiesWithSort(sandwichBaseRepo, sortOption, sortDirection);
+        List<SandwichBaseData> dtoList = mappingUtils.entityListToDtoList(sandwichBaseList, SandwichBaseData.class);
+
+        return new SandwichBaseResponse(dtoList);
+    }
+
+
+    public BreadResponse getAllBreads(String sortOption, String sortDirection) {
+
+        List<Bread> breadList = findAllEntitiesWithSort(breadRepo, sortOption, sortDirection);
+        List<BreadData> breadDataList = mappingUtils.entityListToDtoList(breadList, BreadData.class);
+
+        return new BreadResponse(breadDataList);
     }
 
 
