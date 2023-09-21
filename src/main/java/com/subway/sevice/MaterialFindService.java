@@ -19,7 +19,6 @@ import java.util.List;
 public class MaterialFindService {
 
     private final CustomMapper mapper;
-    private final SortUtils sortUtils;
 
     private final SandwichBaseRepo sandwichBaseRepo;
     private final BreadRepo breadRepo;
@@ -31,7 +30,7 @@ public class MaterialFindService {
 
     public <T> List<T> findAllEntitiesWithSort(JpaRepository<T,?> repository, String sortOption, String sortDirection){
 
-        Sort sort = sortUtils.getSort(sortOption, sortDirection);
+        Sort sort = SortUtils.getSort(sortOption, sortDirection);
         List<T> entityList;
 
         if(sort == null){

@@ -1,12 +1,10 @@
 package com.subway.utils;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
 
-@Component
 public class SortUtils {
 
-    public Sort getSort(String sortOption, String sortDirection) {
+    public static Sort getSort(String sortOption, String sortDirection) {
 
         if(sortOption == null){
             return null;
@@ -17,7 +15,7 @@ public class SortUtils {
         return setSortDirection(sortBySortOption, sortDirection);
     }
 
-    private Sort setSortDirection(Sort sort, String sortDirection) {
+    private static Sort setSortDirection(Sort sort, String sortDirection) {
 
         if (sortDirection==null){
             return sort;
@@ -30,7 +28,7 @@ public class SortUtils {
         return sort;
     }
 
-    private Sort getSortBySortOption(String sortOption) {
+    private static Sort getSortBySortOption(String sortOption) {
 
         if (sortOption.trim().equalsIgnoreCase("kcal")) {
             return Sort.by("kcal");
