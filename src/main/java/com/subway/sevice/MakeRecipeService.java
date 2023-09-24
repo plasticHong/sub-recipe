@@ -40,7 +40,6 @@ public class MakeRecipeService {
     public Long saveRecipe(SaveRecipeRequest request) {
 
         Recipe recipeEntity = makeRecipeEntity(request);
-        System.out.println("recipeEntity : " + recipeEntity);
 
         Long savedRecipeId = recipeRepo.save(recipeEntity).getId();
 
@@ -98,6 +97,7 @@ public class MakeRecipeService {
 
     @Transactional
     public void updateMaterialUsagePoint(RecipeData data) {
+
         updateUsablePoint(sandwichBaseRepo, data.getSandwichBaseId());
         updateUsablePoint(breadRepo, data.getBreadId());
         updateUsablePoint(cheeseRepo, data.getCheeseId());
@@ -106,6 +106,7 @@ public class MakeRecipeService {
         updateUsablePoint(individualMeatRepo, data.getIndividualMeatIds());
         updateUsablePoint(veggieRepo, data.getVeggieIds());
         updateUsablePoint(sauceRepo, data.getSauceIds());
+
     }
 
     @Transactional

@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,9 +35,10 @@ public class RecipeApi {
 
     @Operation(summary = "레시피", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/recipe")
-    public ResponseEntity<?> getRecipe() {
+    public ResponseEntity<?> getRecipe(@RequestParam(required = false) String sortOption,
+                                       @RequestParam(required = false) String sortDirection) {
 
-        List<Recipe> recipe = findRecipeService.findRecipe();
+        List<Recipe> recipe = findRecipeService.findRecipe(sortOption,sortDirection);
 
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipes",recipe),HttpStatus.OK);
     }

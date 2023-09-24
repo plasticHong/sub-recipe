@@ -8,7 +8,6 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Getter
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @Table(name = "recipe", schema = "sub-recipe")
 @NoArgsConstructor
 @ToString
-public class Recipe {
+public class Recipe{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
