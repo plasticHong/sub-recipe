@@ -1,6 +1,8 @@
 package com.subway.controller;
 
 import com.subway.dto.Request.SaveRecipeRequest;
+import com.subway.entity.Recipe;
+import com.subway.sevice.FindRecipeService;
 import com.subway.sevice.MakeRecipeService;
 import com.subway.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/recipe")
@@ -20,16 +24,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RecipeApi {
 
-    private final MakeRecipeService recipeService;
+    private final MakeRecipeService makeRecipeService;
+    private final FindRecipeService findRecipeService;
 
     @Operation(summary = "레시피 생성", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/recipe")
     public ResponseEntity<?> makeRecipe(@RequestBody SaveRecipeRequest request) {
 
-        Long recipeId = recipeService.saveRecipe(request);
+        Long recipeId = makeRecipeService.saveRecipe(request);
 
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipeId",recipeId),HttpStatus.OK);
     }
 
+    @Operation(summary = "레시피", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/recipe")
+    public ResponseEntity<?> getRecipe() {
 
+        List<Recipe> recipe = findRecipeService.findRecipe();
+
+        return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipes",recipe),HttpStatus.OK);
+    }
 }

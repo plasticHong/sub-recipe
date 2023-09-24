@@ -40,11 +40,11 @@ public class MakeRecipeService {
     public Long saveRecipe(SaveRecipeRequest request) {
 
         Recipe recipeEntity = makeRecipeEntity(request);
-        System.out.println("recipeEntity : "+recipeEntity);
+        System.out.println("recipeEntity : " + recipeEntity);
 
         Long savedRecipeId = recipeRepo.save(recipeEntity).getId();
 
-        recipeMappingEntityInsert(request,savedRecipeId);
+        recipeMappingEntityInsert(request, savedRecipeId);
         updateMaterialUsagePoint(request.getRecipeData());
 
         return savedRecipeId;
@@ -56,15 +56,22 @@ public class MakeRecipeService {
         List<Long> extraOptionIds = request.getRecipeData().getExtraOptionIds();
         List<Long> individualMeatIds = request.getRecipeData().getIndividualMeatIds();
 
-        extraOptionIds.forEach(id->{
-            RecipeExtraOption entity = new RecipeExtraOption(recipeId, id);
-            recipeExtraOptionRepo.save(entity);
-        });
+        if (extraOptionIds != null) {
 
-        individualMeatIds.forEach(id->{
-            RecipeIndividualMeat entity = new RecipeIndividualMeat(recipeId, id);
-            recipeIndividualMeatRepo.save(entity);
-        });
+            extraOptionIds.forEach(id -> {
+                RecipeExtraOption entity = new RecipeExtraOption(recipeId, id);
+                recipeExtraOptionRepo.save(entity);
+            });
+
+        }
+
+        if (individualMeatIds != null){
+
+            individualMeatIds.forEach(id -> {
+                RecipeIndividualMeat entity = new RecipeIndividualMeat(recipeId, id);
+                    recipeIndividualMeatRepo.save(entity);
+            });
+        }
 
     }
 
@@ -103,6 +110,11 @@ public class MakeRecipeService {
 
     @Transactional
     public <T> void updateUsablePoint(JpaRepository<T, Long> repo, Long id) {
+
+        if(id==null){
+            return;
+        }
+
         T entity = repo.findById(id).orElseThrow(NoSuchElementException::new);
 
         if (entity instanceof Usable usableEntity) {
@@ -114,7 +126,11 @@ public class MakeRecipeService {
     @Transactional
     public <T> void updateUsablePoint(JpaRepository<T, Long> repo, List<Long> ids) {
 
-        ids.forEach(id ->{
+        if(ids==null){
+            return;
+        }
+
+        ids.forEach(id -> {
             T entity = repo.findById(id).orElseThrow(NoSuchElementException::new);
 
             if (entity instanceof Usable usableEntity) {
