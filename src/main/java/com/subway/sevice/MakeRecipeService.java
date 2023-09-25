@@ -88,7 +88,7 @@ public class MakeRecipeService {
                 .veggieIds(data.getVeggieIds())
                 .sauceIds(data.getSauceIds())
                 .description(data.getDescription())
-                .total_price(data.getTotal_price())
+                .totalPrice(data.getTotalPrice())
                 .totalFat(data.getTotalFat())
                 .totalKcal(data.getTotalKcal())
                 .totalProtein(data.getTotalProtein())

@@ -2,9 +2,12 @@ package com.subway.sevice;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.subway.dto.Request.RecipeSearchCondition;
+import com.subway.dto.Request.RecipeSearchRequest;
 import com.subway.entity.QRecipe;
 import com.subway.entity.Recipe;
 import com.subway.repository.custom.CustomRecipeRepo;
+import com.subway.wrapper.CustomMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +18,15 @@ import java.util.List;
 public class FindRecipeService {
 
     private final CustomRecipeRepo customRecipeRepo;
+    private final CustomMapper mapper;
 
 
-    public List<Recipe> findRecipe(String sortOption, String sortDirection){
+    public List<Recipe> findRecipe(RecipeSearchRequest request){
 
-        OrderSpecifier<?> orderSpec = getOrderSpecifierBySortOption(sortOption, sortDirection);
-        List<Recipe> recipe = customRecipeRepo.findRecipe(orderSpec);
+        OrderSpecifier<?> orderCondition = getOrderSpecifierBySortOption(request.getSortOption(), request.getSortDirection());
+        RecipeSearchCondition searchCondition = mapper.map(request, RecipeSearchCondition.class);
+
+        List<Recipe> recipe = customRecipeRepo.findRecipe(orderCondition,searchCondition);
 
         return recipe;
     }
@@ -43,7 +49,7 @@ public class FindRecipeService {
             return new OrderSpecifier<>(orderDirection, QRecipe.recipe.totalFat);
         }
         if (sortOption.trim().equalsIgnoreCase("price")) {
-            return new OrderSpecifier<>(orderDirection, QRecipe.recipe.total_price);
+            return new OrderSpecifier<>(orderDirection, QRecipe.recipe.totalPrice);
         }
         if (sortOption.trim().equalsIgnoreCase("respect")) {
             return new OrderSpecifier<>(orderDirection, QRecipe.recipe.respectPoint);

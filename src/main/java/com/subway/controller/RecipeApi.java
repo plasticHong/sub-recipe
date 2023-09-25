@@ -1,5 +1,6 @@
 package com.subway.controller;
 
+import com.subway.dto.Request.RecipeSearchRequest;
 import com.subway.dto.Request.SaveRecipeRequest;
 import com.subway.entity.Recipe;
 import com.subway.sevice.FindRecipeService;
@@ -25,7 +26,7 @@ public class RecipeApi {
     private final FindRecipeService findRecipeService;
 
     @Operation(summary = "레시피 생성", description = "")
-    @RequestMapping(method = RequestMethod.POST, value = "/recipe")
+    @RequestMapping(method = RequestMethod.POST, value = "/save")
     public ResponseEntity<?> makeRecipe(@RequestBody SaveRecipeRequest request) {
 
         Long recipeId = makeRecipeService.saveRecipe(request);
@@ -34,11 +35,10 @@ public class RecipeApi {
     }
 
     @Operation(summary = "레시피", description = "")
-    @RequestMapping(method = RequestMethod.GET, value = "/recipe")
-    public ResponseEntity<?> getRecipe(@RequestParam(required = false) String sortOption,
-                                       @RequestParam(required = false) String sortDirection) {
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    public ResponseEntity<?> getRecipe(@RequestBody RecipeSearchRequest request) {
 
-        List<Recipe> recipe = findRecipeService.findRecipe(sortOption,sortDirection);
+        List<Recipe> recipe = findRecipeService.findRecipe(request);
 
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipes",recipe),HttpStatus.OK);
     }

@@ -24,6 +24,9 @@ public class RecipeData {
 
     private final Long cheeseId;
 
+    private final boolean isBaked;
+
+
     /*
      * 제외 야채
      * */
@@ -40,7 +43,7 @@ public class RecipeData {
 
     private final List<Long> individualMeatIds;
 
-    private final Integer total_price;
+    private final Integer totalPrice;
 
     private final Double totalKcal;
 
