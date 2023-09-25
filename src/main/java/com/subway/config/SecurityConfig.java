@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .requestMatchers("/member/my-page/**").authenticated()
                         .requestMatchers("/recipe/save/**").authenticated()
+                        .requestMatchers("/recipe/evaluate/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

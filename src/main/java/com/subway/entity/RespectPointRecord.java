@@ -2,10 +2,12 @@ package com.subway.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "respect_point_records", schema = "sub-recipe")
+@NoArgsConstructor
 public class RespectPointRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +19,8 @@ public class RespectPointRecord {
     @Column(name = "recipe_id")
     private Long recipeId;
 
-    @Column(name = "point")
-    private Integer point;
+    public RespectPointRecord(Long memberId, Long recipeId) {
+        this.memberId = memberId;
+        this.recipeId = recipeId;
+    }
 }

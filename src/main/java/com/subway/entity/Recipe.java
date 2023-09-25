@@ -98,8 +98,8 @@ public class Recipe{
     @Column(name = "total_fat")
     private Double totalFat;
 
-    @Column(name = "star_point")
-    private Integer starPoint;
+    @Column(name = "jmt_point")
+    private Integer jmtPoint;
 
     @Column(name = "respect_point")
     private Integer respectPoint;
@@ -117,6 +117,8 @@ public class Recipe{
     public void onPrePersist() {
         this.createTime = LocalDateTime.now();
         this.useYn = true;
+        this.respectPoint = 0;
+        this.jmtPoint = 0;
     }
 
     @Builder
@@ -138,6 +140,14 @@ public class Recipe{
 
         setExceptionVeggies(veggieIds);
         setSauces(sauceIds);
+    }
+
+    public void gotJmt() {
+        this.jmtPoint = jmtPoint + 1;
+    }
+
+    public void gotRespect() {
+        this.respectPoint = respectPoint + 1;
     }
 
     public void softDelete() {

@@ -54,8 +54,8 @@ public class FindRecipeService {
         if (sortOption.trim().equalsIgnoreCase("respect")) {
             return new OrderSpecifier<>(orderDirection, QRecipe.recipe.respectPoint);
         }
-        if (sortOption.trim().equalsIgnoreCase("star")) {
-            return new OrderSpecifier<>(orderDirection, QRecipe.recipe.starPoint);
+        if (sortOption.trim().equalsIgnoreCase("jmt")) {
+            return new OrderSpecifier<>(orderDirection, QRecipe.recipe.jmtPoint);
         }
 
         return new OrderSpecifier<>(orderDirection, QRecipe.recipe.id);

@@ -6,6 +6,7 @@ import com.subway.entity.Recipe;
 import com.subway.sevice.FavoriteRecipeService;
 import com.subway.sevice.FindRecipeService;
 import com.subway.sevice.MakeRecipeService;
+import com.subway.sevice.RecipeEvaluateService;
 import com.subway.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,7 @@ public class RecipeApi {
     private final MakeRecipeService makeRecipeService;
     private final FindRecipeService findRecipeService;
     private final FavoriteRecipeService favoriteRecipeService;
+    private final RecipeEvaluateService recipeEvaluateService;
 
     @Operation(summary = "레시피 생성", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/save")
@@ -54,12 +56,22 @@ public class RecipeApi {
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("savedFavoriteRecipeId",favoriteRecipeId),HttpStatus.OK);
     }
 
-    @Operation(summary = "레시피", description = "")
-    @RequestMapping(method = RequestMethod.POST, value = "/")
-    public ResponseEntity<?> extract() {
+    @Operation(summary = "레시피 평가/jmt", description = "")
+    @RequestMapping(method = RequestMethod.POST, value = "/evaluate/jmt")
+    public ResponseEntity<?> jmt(@RequestParam Long recipeId) {
+
+        recipeEvaluateService.jmt(recipeId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "레시피 평가/respect", description = "")
+    @RequestMapping(method = RequestMethod.POST, value = "/evaluate/respect")
+    public ResponseEntity<?> respect(@RequestParam Long recipeId) {
+
+        recipeEvaluateService.respect(recipeId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
