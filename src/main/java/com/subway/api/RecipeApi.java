@@ -60,7 +60,11 @@ public class RecipeApi {
     @RequestMapping(method = RequestMethod.POST, value = "/evaluate/jmt")
     public ResponseEntity<?> jmt(@RequestParam Long recipeId) {
 
-        recipeEvaluateService.jmt(recipeId);
+        Long jmtRecordId = recipeEvaluateService.jmt(recipeId);
+
+        if (jmtRecordId == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -69,7 +73,11 @@ public class RecipeApi {
     @RequestMapping(method = RequestMethod.POST, value = "/evaluate/respect")
     public ResponseEntity<?> respect(@RequestParam Long recipeId) {
 
-        recipeEvaluateService.respect(recipeId);
+        Long respectRecordId = recipeEvaluateService.respect(recipeId);
+
+        if (respectRecordId == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

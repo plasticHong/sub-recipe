@@ -22,23 +22,23 @@ public class RecipeEvaluateService {
     private final RecipeRepo recipeRepo;
 
     @Transactional
-    public void jmt(Long recipeId) {
-        evaluatePoint(recipeId, RecordType.JMT);
+    public Long jmt(Long recipeId) {
+        return evaluatePoint(recipeId, RecordType.JMT);
     }
 
     @Transactional
-    public void respect(Long recipeId) {
-        evaluatePoint(recipeId, RecordType.RESPECT);
+    public Long respect(Long recipeId) {
+        return evaluatePoint(recipeId, RecordType.RESPECT);
     }
 
-    private void evaluatePoint(Long recipeId, RecordType type) {
+    private Long evaluatePoint(Long recipeId, RecordType type) {
         Long memberId = AuthenticationUtils.getCurrentMemberId();
 
         boolean isAlreadyEvaluate = isAlreadyEvaluate(recipeId, memberId, type);
 
         if (isAlreadyEvaluate) {
             System.out.println("can not undo!");
-            return;
+            return null;
         }
 
         Recipe recipe = recipeRepo.findById(recipeId)
@@ -46,17 +46,20 @@ public class RecipeEvaluateService {
 
         switch (type){
             case JMT -> {
-                JmtPointRecord jmtPointRecord = new JmtPointRecord(memberId, recipeId);
-                jmtRecordRepo.save(jmtPointRecord);
                 recipe.gotJmt();
+
+                JmtPointRecord jmtPointRecord = new JmtPointRecord(memberId, recipeId);
+                return jmtRecordRepo.save(jmtPointRecord).getId();
             }
             case RESPECT -> {
-                RespectPointRecord respectPointRecord = new RespectPointRecord(memberId, recipeId);
-                respectRecordRepo.save(respectPointRecord);
                 recipe.gotRespect();
+
+                RespectPointRecord respectPointRecord = new RespectPointRecord(memberId, recipeId);
+                return respectRecordRepo.save(respectPointRecord).getId();
             }
         }
 
+        return null;
     }
 
     private boolean isAlreadyEvaluate(Long recipeId, Long memberId, RecordType type) {
