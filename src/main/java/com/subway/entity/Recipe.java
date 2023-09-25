@@ -87,7 +87,7 @@ public class Recipe{
 
 
     @Column(name = "total_price")
-    private Integer total_price;
+    private Integer totalPrice;
 
     @Column(name = "total_kcal")
     private Double totalKcal;
@@ -107,15 +107,22 @@ public class Recipe{
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
+    @Column(name = "deleted_time")
+    private LocalDateTime deletedTime;
+
+    @Column(name = "use_yn")
+    private Boolean useYn;
+
     @PrePersist
     public void onPrePersist() {
         this.createTime = LocalDateTime.now();
+        this.useYn = true;
     }
 
     @Builder
     public Recipe(Long memberId, String title, Long sandwichBaseId, String description,
                   Long breadId, Long cheeseId,
-                  Integer total_price, Double totalKcal, Double totalProtein, Double totalFat,
+                  Integer totalPrice, Double totalKcal, Double totalProtein, Double totalFat,
                   List<Long> veggieIds, List<Long> sauceIds) {
 
         this.memberId = memberId;
@@ -124,13 +131,18 @@ public class Recipe{
         this.description = description;
         this.breadId = breadId;
         this.cheeseId = cheeseId;
-        this.total_price = total_price;
+        this.totalPrice = totalPrice;
         this.totalKcal = totalKcal;
         this.totalProtein = totalProtein;
         this.totalFat = totalFat;
 
         setExceptionVeggies(veggieIds);
         setSauces(sauceIds);
+    }
+
+    public void softDelete() {
+        this.useYn = false;
+        this.deletedTime = LocalDateTime.now();
     }
 
     private void setExceptionVeggies(List<Long> veggieIds) {
