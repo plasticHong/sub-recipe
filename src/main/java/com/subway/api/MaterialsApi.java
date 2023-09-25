@@ -1,4 +1,4 @@
-package com.subway.controller;
+package com.subway.api;
 
 import com.subway.dto.response.*;
 import com.subway.sevice.MaterialFindService;

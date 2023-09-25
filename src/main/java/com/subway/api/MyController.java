@@ -1,4 +1,4 @@
-package com.subway.controller;
+package com.subway.api;
 
 import com.subway.entity.Sauce;
 import com.subway.sevice.SauceService;

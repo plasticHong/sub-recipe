@@ -1,4 +1,4 @@
-package com.subway.controller;
+package com.subway.api;
 
 import com.subway.dto.LoginResponse;
 import com.subway.dto.Message;
@@ -13,11 +13,8 @@ import com.subway.sevice.MemberInfoService;
 import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;

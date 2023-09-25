@@ -1,8 +1,9 @@
-package com.subway.controller;
+package com.subway.api;
 
 import com.subway.dto.Request.RecipeSearchRequest;
 import com.subway.dto.Request.SaveRecipeRequest;
 import com.subway.entity.Recipe;
+import com.subway.sevice.FavoriteRecipeService;
 import com.subway.sevice.FindRecipeService;
 import com.subway.sevice.MakeRecipeService;
 import com.subway.utils.ResponseUtils;
@@ -24,6 +25,7 @@ public class RecipeApi {
 
     private final MakeRecipeService makeRecipeService;
     private final FindRecipeService findRecipeService;
+    private final FavoriteRecipeService favoriteRecipeService;
 
     @Operation(summary = "레시피 생성", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/save")
@@ -34,7 +36,7 @@ public class RecipeApi {
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipeId",recipeId),HttpStatus.OK);
     }
 
-    @Operation(summary = "레시피", description = "")
+    @Operation(summary = "레시피 검색", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/search")
     public ResponseEntity<?> getRecipe(@RequestBody RecipeSearchRequest request) {
 
@@ -42,4 +44,14 @@ public class RecipeApi {
 
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipes",recipe),HttpStatus.OK);
     }
+
+    @Operation(summary = "레시피 즐겨찾기", description = "")
+    @RequestMapping(method = RequestMethod.POST, value = "/save/favorite")
+    public ResponseEntity<?> saveRecipe(@RequestParam Long recipeId) {
+
+        Long favoriteRecipeId = favoriteRecipeService.saveFavoriteRecipe(recipeId);
+
+        return new ResponseEntity<>(ResponseUtils.makeJsonFormat("savedFavoriteRecipeId",favoriteRecipeId),HttpStatus.OK);
+    }
+
 }
