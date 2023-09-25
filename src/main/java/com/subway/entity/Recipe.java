@@ -33,6 +33,9 @@ public class Recipe{
     @Column(name = "description")
     private String description;
 
+    @Column(name = "is_baked")
+    private boolean isBaked;
+
     /*
      * sandwichBase 기본 wheat(위트)
      * */
