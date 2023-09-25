@@ -54,4 +54,12 @@ public class RecipeApi {
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("savedFavoriteRecipeId",favoriteRecipeId),HttpStatus.OK);
     }
 
+    @Operation(summary = "레시피", description = "")
+    @RequestMapping(method = RequestMethod.POST, value = "/")
+    public ResponseEntity<?> extract() {
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }
