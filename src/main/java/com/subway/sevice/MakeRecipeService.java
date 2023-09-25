@@ -6,15 +6,19 @@ import com.subway.entity.Recipe;
 import com.subway.entity.Usable;
 import com.subway.entity.mapping.RecipeExtraOption;
 import com.subway.entity.mapping.RecipeIndividualMeat;
+import com.subway.exception.CustomAuthException;
 import com.subway.repository.RecipeRepo;
 import com.subway.repository.mapping.RecipeExtraOptionRepo;
 import com.subway.repository.mapping.RecipeIndividualMeatRepo;
 import com.subway.repository.material.*;
+import com.subway.utils.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.sasl.AuthenticationException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -77,7 +81,7 @@ public class MakeRecipeService {
     public Recipe makeRecipeEntity(SaveRecipeRequest request) {
 
         RecipeData data = request.getRecipeData();
-        Long ownerId = request.getOwnerId();
+        Long ownerId = AuthenticationUtils.getCurrentMemberId();
 
         return Recipe.builder()
                 .memberId(ownerId)
