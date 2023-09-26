@@ -23,8 +23,8 @@ public class Member {
     @Column(name = "nickname")
     private String nickName;
 
-    @Column(name = "star_point")
-    private Integer starPoint;
+    @Column(name = "jmt_point")
+    private Integer jmtPoint;
 
     @Column(name = "respect_point")
     private Integer respectPoint;
@@ -38,8 +38,15 @@ public class Member {
 
     @PrePersist
     public void onPrePersist() {
-        this.starPoint = 0;
+        this.jmtPoint = 0;
         this.respectPoint = 0;
     }
 
+    public void jmtPointIncrease() {
+        this.jmtPoint = jmtPoint + 1;
+    }
+
+    public void respectPointIncrease() {
+        this.respectPoint = respectPoint + 1;
+    }
 }

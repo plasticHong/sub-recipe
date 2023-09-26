@@ -3,7 +3,9 @@ package com.subway.sevice;
 import com.subway.entity.JmtPointRecord;
 import com.subway.entity.Recipe;
 import com.subway.entity.RespectPointRecord;
+import com.subway.entity.member.Member;
 import com.subway.repository.JmtPointRecordRepo;
+import com.subway.repository.MemberRepo;
 import com.subway.repository.RecipeRepo;
 import com.subway.repository.RespectPointRecordRepo;
 import com.subway.utils.AuthenticationUtils;
@@ -20,6 +22,7 @@ public class RecipeEvaluateService {
     private final JmtPointRecordRepo jmtRecordRepo;
     private final RespectPointRecordRepo respectRecordRepo;
     private final RecipeRepo recipeRepo;
+    private final MemberRepo memberRepo;
 
     @Transactional
     public Long jmt(Long recipeId) {
@@ -47,12 +50,14 @@ public class RecipeEvaluateService {
         switch (type){
             case JMT -> {
                 recipe.gotJmt();
+                pointIncreaseByRecordType(memberId,type);
 
                 JmtPointRecord jmtPointRecord = new JmtPointRecord(memberId, recipeId);
                 return jmtRecordRepo.save(jmtPointRecord).getId();
             }
             case RESPECT -> {
                 recipe.gotRespect();
+                pointIncreaseByRecordType(memberId,type);
 
                 RespectPointRecord respectPointRecord = new RespectPointRecord(memberId, recipeId);
                 return respectRecordRepo.save(respectPointRecord).getId();
@@ -60,6 +65,16 @@ public class RecipeEvaluateService {
         }
 
         return null;
+    }
+
+    private void pointIncreaseByRecordType(Long memberId, RecordType type) {
+        Member member = memberRepo.findById(memberId).orElseThrow(() -> new NoSuchElementException("check memberId"));
+        if (type.equals(RecordType.RESPECT)) {
+            member.respectPointIncrease();
+        }
+        if (type.equals(RecordType.JMT)) {
+            member.jmtPointIncrease();
+        }
     }
 
     private boolean isAlreadyEvaluate(Long recipeId, Long memberId, RecordType type) {

@@ -24,6 +24,7 @@
 * Application
   * Spring boot 3.1.3
   * Java 17
+  * JPA / QueryDSL
 * DB
   * AWS RDS (free tier)
   * MySql 8

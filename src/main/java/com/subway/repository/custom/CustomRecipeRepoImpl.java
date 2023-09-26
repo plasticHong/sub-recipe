@@ -1,9 +1,7 @@
 package com.subway.repository.custom;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.subway.dto.Request.RecipeSearchCondition;
 import com.subway.entity.QRecipe;
@@ -28,6 +26,7 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo{
                 .from(recipe)
                 .orderBy(orderCondition)
                 .where(
+                        recipe.useYn.isTrue(),
                         eqSandwichBaseId(searchCondition.getSandwichBaseId()),
                         withOutCucumber(searchCondition.getIsWithOutCucumber()),
 
