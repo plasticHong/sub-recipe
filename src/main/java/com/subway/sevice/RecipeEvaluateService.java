@@ -26,15 +26,15 @@ public class RecipeEvaluateService {
 
     @Transactional
     public Long jmt(Long recipeId) {
-        return evaluatePoint(recipeId, RecordType.JMT);
+        return recipeEvaluation(recipeId, EvaluationType.JMT);
     }
 
     @Transactional
     public Long respect(Long recipeId) {
-        return evaluatePoint(recipeId, RecordType.RESPECT);
+        return recipeEvaluation(recipeId, EvaluationType.RESPECT);
     }
 
-    private Long evaluatePoint(Long recipeId, RecordType type) {
+    private Long recipeEvaluation(Long recipeId, EvaluationType type) {
 
         String ipAddr = AuthenticationUtils.getUserIp();
         Long memberId = AuthenticationUtils.getCurrentMemberId();
@@ -46,7 +46,6 @@ public class RecipeEvaluateService {
         } else {
             isAlreadyEvaluate = isAlreadyEvaluate(memberId, recipeId, type);
         }
-
 
         if (isAlreadyEvaluate) {
             System.out.println("can not undo!");
@@ -78,43 +77,46 @@ public class RecipeEvaluateService {
         return null;
     }
 
-    private void pointIncreaseByRecordType(Long recipeOwnerId, RecordType type) {
+    private void pointIncreaseByRecordType(Long recipeOwnerId, EvaluationType type) {
 
         Member recipeOwner = memberRepo.findById(recipeOwnerId).orElseThrow(() -> new NoSuchElementException("memberId {" + recipeOwnerId + "}"));
-        if (type.equals(RecordType.RESPECT)) {
-            recipeOwner.respectPointIncrease();
-        }
-        if (type.equals(RecordType.JMT)) {
-            recipeOwner.jmtPointIncrease();
+
+        switch (type){
+            case JMT -> recipeOwner.jmtPointIncrease();
+            case RESPECT -> recipeOwner.respectPointIncrease();
         }
 
     }
 
-    private boolean isAlreadyEvaluate(Long memberId, Long recipeId, RecordType type) {
+    private boolean isAlreadyEvaluate(Long memberId, Long recipeId, EvaluationType type) {
 
-        if (type.equals(RecordType.RESPECT)) {
-            return respectRecordRepo.findByMemberIdAndRecipeId(memberId, recipeId).isPresent();
-        }
-        if (type.equals(RecordType.JMT)) {
-            return jmtRecordRepo.findByMemberIdAndRecipeId(memberId, recipeId).isPresent();
+        switch (type){
+            case JMT -> {
+                return jmtRecordRepo.findByMemberIdAndRecipeId(memberId, recipeId).isPresent();
+            }
+            case RESPECT -> {
+                return respectRecordRepo.findByMemberIdAndRecipeId(memberId, recipeId).isPresent();
+            }
         }
 
         return false;
     }
 
-    private boolean isAlreadyEvaluate(Long recipeId, String ipAddr, RecordType type) {
+    private boolean isAlreadyEvaluate(Long recipeId, String ipAddr, EvaluationType type) {
 
-        if (type.equals(RecordType.RESPECT)) {
-            return respectRecordRepo.findByRecipeIdAndIpAddr(recipeId, ipAddr).isPresent();
-        }
-        if (type.equals(RecordType.JMT)) {
-            return jmtRecordRepo.findByRecipeIdAndIpAddr(recipeId, ipAddr).isPresent();
+        switch (type){
+            case JMT -> {
+                return jmtRecordRepo.findByRecipeIdAndIpAddr(recipeId, ipAddr).isPresent();
+            }
+            case RESPECT -> {
+                return respectRecordRepo.findByRecipeIdAndIpAddr(recipeId, ipAddr).isPresent();
+            }
         }
 
         return false;
     }
 
-    private enum RecordType {
+    private enum EvaluationType {
         JMT, RESPECT
     }
 
