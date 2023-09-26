@@ -1,6 +1,5 @@
 # sub-recipe
 
-<hr>
 
 서비스 개요
 
@@ -14,6 +13,8 @@
 * 등록된 레시피에 평가를 내릴 수 있습니다 ( 추천 / 비추천 )
 * 레시피를 즐겨찾기에 등록하고 열람 할 수 있습니다
 
+## table diagram
+![diagram](https://github.com/plasticHong/sub-recipe-api/assets/101045399/c2dd0f79-8339-417e-9bc0-ab0385e94a81)
 
 
 
