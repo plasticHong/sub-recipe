@@ -13,6 +13,13 @@
 * 등록된 레시피에 평가를 내릴 수 있습니다 ( 추천 / 비추천 )
 * 레시피를 즐겨찾기에 등록하고 열람 할 수 있습니다
 
+## 참여
+* Server  
+  * plasticHong https://github.com/plasticHong
+* client
+  * frontEnd : emop99 https://github.com/emop99 
+  * publishing : (markUp) lim072 https://github.com/lim072
+
 ## 개발 환경 (Server)
 * Application
   * Spring boot 3.1.3
@@ -27,6 +34,7 @@
   * AWS S3
 
 ## 개발 환경 (Front)
+* repository : https://github.com/emop99/subway-front
 
 ## table diagram
 ![diagram](https://github.com/plasticHong/sub-recipe-api/assets/101045399/c2dd0f79-8339-417e-9bc0-ab0385e94a81)
