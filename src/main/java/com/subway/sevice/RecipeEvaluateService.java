@@ -35,9 +35,18 @@ public class RecipeEvaluateService {
     }
 
     private Long evaluatePoint(Long recipeId, RecordType type) {
+
+        String ipAddr = AuthenticationUtils.getUserIp();
         Long memberId = AuthenticationUtils.getCurrentMemberId();
 
-        boolean isAlreadyEvaluate = isAlreadyEvaluate(recipeId, memberId, type);
+        boolean isAlreadyEvaluate;
+
+        if (memberId == null) {
+            isAlreadyEvaluate = isAlreadyEvaluate(recipeId, ipAddr, type);
+        } else {
+            isAlreadyEvaluate = isAlreadyEvaluate(memberId, recipeId, type);
+        }
+
 
         if (isAlreadyEvaluate) {
             System.out.println("can not undo!");
@@ -45,21 +54,23 @@ public class RecipeEvaluateService {
         }
 
         Recipe recipe = recipeRepo.findById(recipeId)
-                .orElseThrow(() -> new NoSuchElementException("recipeId: " + recipeId));
+                .orElseThrow(() -> new NoSuchElementException("recipeId {" + recipeId + "}"));
 
-        switch (type){
+        Long recipeOwnerId = recipe.getMemberId();
+
+        switch (type) {
             case JMT -> {
                 recipe.gotJmt();
-                pointIncreaseByRecordType(memberId,type);
+                pointIncreaseByRecordType(recipeOwnerId, type);
 
-                JmtPointRecord jmtPointRecord = new JmtPointRecord(memberId, recipeId);
+                JmtPointRecord jmtPointRecord = new JmtPointRecord(memberId, recipeId, ipAddr);
                 return jmtRecordRepo.save(jmtPointRecord).getId();
             }
             case RESPECT -> {
                 recipe.gotRespect();
-                pointIncreaseByRecordType(memberId,type);
+                pointIncreaseByRecordType(recipeOwnerId, type);
 
-                RespectPointRecord respectPointRecord = new RespectPointRecord(memberId, recipeId);
+                RespectPointRecord respectPointRecord = new RespectPointRecord(memberId, recipeId, ipAddr);
                 return respectRecordRepo.save(respectPointRecord).getId();
             }
         }
@@ -67,23 +78,39 @@ public class RecipeEvaluateService {
         return null;
     }
 
-    private void pointIncreaseByRecordType(Long memberId, RecordType type) {
-        Member member = memberRepo.findById(memberId).orElseThrow(() -> new NoSuchElementException("check memberId"));
+    private void pointIncreaseByRecordType(Long recipeOwnerId, RecordType type) {
+
+        Member recipeOwner = memberRepo.findById(recipeOwnerId).orElseThrow(() -> new NoSuchElementException("memberId {" + recipeOwnerId + "}"));
         if (type.equals(RecordType.RESPECT)) {
-            member.respectPointIncrease();
+            recipeOwner.respectPointIncrease();
         }
         if (type.equals(RecordType.JMT)) {
-            member.jmtPointIncrease();
+            recipeOwner.jmtPointIncrease();
         }
+
     }
 
-    private boolean isAlreadyEvaluate(Long recipeId, Long memberId, RecordType type) {
+    private boolean isAlreadyEvaluate(Long memberId, Long recipeId, RecordType type) {
+
         if (type.equals(RecordType.RESPECT)) {
             return respectRecordRepo.findByMemberIdAndRecipeId(memberId, recipeId).isPresent();
         }
         if (type.equals(RecordType.JMT)) {
             return jmtRecordRepo.findByMemberIdAndRecipeId(memberId, recipeId).isPresent();
         }
+
+        return false;
+    }
+
+    private boolean isAlreadyEvaluate(Long recipeId, String ipAddr, RecordType type) {
+
+        if (type.equals(RecordType.RESPECT)) {
+            return respectRecordRepo.findByRecipeIdAndIpAddr(recipeId, ipAddr).isPresent();
+        }
+        if (type.equals(RecordType.JMT)) {
+            return jmtRecordRepo.findByRecipeIdAndIpAddr(recipeId, ipAddr).isPresent();
+        }
+
         return false;
     }
 

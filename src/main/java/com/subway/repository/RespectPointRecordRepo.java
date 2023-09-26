@@ -10,5 +10,7 @@ import java.util.Optional;
 public interface RespectPointRecordRepo extends JpaRepository<RespectPointRecord, Long> {
 
     Optional<RespectPointRecord> findByMemberIdAndRecipeId(Long memberId, Long recipeId);
+    Optional<RespectPointRecord> findByRecipeIdAndIpAddr(Long recipeId,String ipAddr);
+
 
 }

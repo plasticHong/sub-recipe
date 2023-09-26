@@ -19,8 +19,12 @@ public class JmtPointRecord {
     @Column(name = "recipe_id")
     private Long recipeId;
 
-    public JmtPointRecord(Long memberId, Long recipeId) {
+    @Column(name = "ip_addr")
+    private String ipAddr;
+
+    public JmtPointRecord(Long memberId, Long recipeId, String ipAddr) {
         this.memberId = memberId;
         this.recipeId = recipeId;
+        this.ipAddr = ipAddr;
     }
 }

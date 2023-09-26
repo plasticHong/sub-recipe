@@ -38,7 +38,7 @@ public class MemberApi {
             
             <hr>
             
-            #return 
+            #return
             - id(Long) : PK
             - nickName(String) : nickName
             """)
@@ -105,7 +105,8 @@ public class MemberApi {
         }
 
     }
-
+    
+    @Operation(summary = "토큰 리프레시", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/refresh")
     public ResponseEntity<?> validateRefreshToken(@RequestBody TokenRefreshRequest req) {
 

@@ -19,8 +19,12 @@ public class RespectPointRecord {
     @Column(name = "recipe_id")
     private Long recipeId;
 
-    public RespectPointRecord(Long memberId, Long recipeId) {
+    @Column(name = "ip_addr")
+    private String ipAddr;
+
+    public RespectPointRecord(Long memberId, Long recipeId, String ipAddr) {
         this.memberId = memberId;
         this.recipeId = recipeId;
+        this.ipAddr = ipAddr;
     }
 }
