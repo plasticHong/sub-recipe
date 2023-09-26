@@ -66,7 +66,7 @@ public class RecipeApi {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtils.makeJsonFormat("jmtRecordId",jmtRecordId),HttpStatus.OK);
     }
 
     @Operation(summary = "레시피 평가/respect", description = "")
@@ -79,7 +79,7 @@ public class RecipeApi {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtils.makeJsonFormat("respectRecordId",respectRecordId),HttpStatus.OK);
     }
 
 }

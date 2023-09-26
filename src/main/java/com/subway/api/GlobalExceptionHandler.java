@@ -10,14 +10,16 @@ import java.util.NoSuchElementException;
 
 @ControllerAdvice()
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(CustomAuthException.class)
-    public ResponseEntity<String> handleCustomException(CustomAuthException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: " + ex.getMessage());
+    public ResponseEntity<String> handleCustomException(CustomAuthException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied: " + e.getMessage());
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request! check args: " + ex.getMessage());
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request! check args: " + e.getMessage());
     }
+
 }
 
