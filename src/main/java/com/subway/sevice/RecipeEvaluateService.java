@@ -59,6 +59,7 @@ public class RecipeEvaluateService {
 
         switch (type) {
             case JMT -> {
+
                 recipe.gotJmt();
                 pointIncreaseByRecordType(recipeOwnerId, type);
 
@@ -66,6 +67,7 @@ public class RecipeEvaluateService {
                 return jmtRecordRepo.save(jmtPointRecord).getId();
             }
             case RESPECT -> {
+
                 recipe.gotRespect();
                 pointIncreaseByRecordType(recipeOwnerId, type);
 

@@ -42,6 +42,14 @@ public class Member {
         this.respectPoint = 0;
     }
 
+    public Member(String userId) {
+        this.userId = userId;
+    }
+
+    public void nicknameRegistration(String nickName) {
+        this.nickName = nickName;
+    }
+
     public void jmtPointIncrease() {
         this.jmtPoint = jmtPoint + 1;
     }

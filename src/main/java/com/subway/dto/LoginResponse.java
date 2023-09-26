@@ -18,9 +18,7 @@ public class LoginResponse {
     private String message;
     private Long memberId;
 
-    @Builder
-    public LoginResponse(String message, Long memberId) {
-        this.message = message;
+    public LoginResponse(Long memberId) {
         this.memberId = memberId;
     }
 
