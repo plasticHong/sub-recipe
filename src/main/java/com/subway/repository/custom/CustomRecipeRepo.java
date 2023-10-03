@@ -3,6 +3,8 @@ package com.subway.repository.custom;
 import com.querydsl.core.types.OrderSpecifier;
 import com.subway.dto.Request.RecipeSearchCondition;
 import com.subway.dto.response.data.RecipeData;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +12,6 @@ import java.util.List;
 @Repository
 public interface CustomRecipeRepo {
 
-//    public List<Recipe> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition);
-    public List<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition);
+    Page<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition, Pageable pageable);
 
 }

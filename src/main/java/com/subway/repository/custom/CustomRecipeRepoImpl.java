@@ -12,6 +12,9 @@ import com.subway.entity.QRecipe;
 import com.subway.entity.QSandwichBase;
 import com.subway.entity.member.QMember;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,21 +30,22 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
     private final QSandwichBase sandwichBase = QSandwichBase.sandwichBase;
 
     @Override
-    public List<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition) {
+    public Page<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition, Pageable pageable) {
 
-        return queryFactory.select(Projections.bean(RecipeData.class,
+        List<RecipeData> list = queryFactory.select(Projections.bean(RecipeData.class,
                         recipe.id,
                         recipe.title,
                         recipe.memberId,
                         member.nickName.as("ownerNickname"),
-                        recipe.sandwichBaseId.as("sandwichBaseId"),
+                        recipe.sandwichBaseId,
                         sandwichBase.korName.as("sandwichBaseName"),
                         recipe.totalPrice,
                         recipe.totalKcal,
                         recipe.totalProtein,
                         recipe.totalFat,
                         recipe.jmtPoint,
-                        recipe.respectPoint
+                        recipe.respectPoint,
+                        recipe.createTime
                 ))
                 .from(recipe)
                 .join(member).on(member.id.eq(recipe.memberId))
@@ -50,6 +54,7 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
                 .where(
                         recipe.useYn.isTrue(),
                         eqSandwichBaseId(searchCondition.getSandwichBaseId()),
+                        eqMemberId(searchCondition.getMemberId()),
                         withOutCucumber(searchCondition.getIsWithOutCucumber()),
 
                         loeMaxKcal(searchCondition.getMaxKcal()),
@@ -64,7 +69,36 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
                         loeMaxPrice(searchCondition.getMaxPrice()),
                         goeMinPrice(searchCondition.getMinPrice())
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        System.out.println(list.size());
+
+        Long count = queryFactory.select(recipe.count())
+                .from(recipe)
+                .where(recipe.useYn.isTrue(),
+                        eqSandwichBaseId(searchCondition.getSandwichBaseId()),
+                        eqMemberId(searchCondition.getMemberId()),
+                        withOutCucumber(searchCondition.getIsWithOutCucumber()),
+
+                        loeMaxKcal(searchCondition.getMaxKcal()),
+                        goeMinKcal(searchCondition.getMinKcal()),
+
+                        loeMaxFat(searchCondition.getMaxFat()),
+                        goeMinFat(searchCondition.getMinFat()),
+
+                        loeMaxProtein(searchCondition.getMaxProtein()),
+                        goeMinProtein(searchCondition.getMinProtein()),
+
+                        loeMaxPrice(searchCondition.getMaxPrice()),
+                        goeMinPrice(searchCondition.getMinPrice()))
+                .fetchOne();
+
+        if (count!=null){
+            return new PageImpl<>(list,pageable,count);
+        }
+        return new PageImpl<>(list);
     }
 
     private BooleanExpression withOutCucumber(Boolean isWithOutCucumber) {
@@ -96,6 +130,10 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
                         recipe.veggie8.isNull().or(recipe.veggie8.ne(cucumberId).and(recipe.veggie8.ne(pickleId)))
                 );
 
+    }
+    private BooleanExpression eqMemberId(final Long memberId) {
+        if (memberId == null) return null;
+        return recipe.memberId.eq(memberId);
     }
 
     private BooleanExpression eqSandwichBaseId(final Long sandwichBaseId) {

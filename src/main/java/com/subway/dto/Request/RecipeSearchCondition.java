@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class RecipeSearchCondition {
     private Long sandwichBaseId;
+    private Long memberId;
     private Boolean isWithOutCucumber;
 
     private Double maxKcal;

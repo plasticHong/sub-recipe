@@ -10,6 +10,10 @@ import com.subway.entity.QRecipe;
 import com.subway.repository.custom.CustomRecipeRepo;
 import com.subway.wrapper.CustomMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +31,9 @@ public class FindRecipeService {
         OrderSpecifier<?> orderCondition = getOrderSpecifierBySortOption(request.getSortOption(), request.getSortDirection());
         RecipeSearchCondition searchCondition = mapper.map(request, RecipeSearchCondition.class);
 
-        List<RecipeData> recipe = customRecipeRepo.findRecipe(orderCondition,searchCondition);
+        int pageNum = request.getPageNum() != null ? request.getPageNum() : 0;
+        int pageSize = request.getPageSize() != null ? request.getPageSize() : 10;
+        Page<RecipeData> recipe = customRecipeRepo.findRecipe(orderCondition, searchCondition, PageRequest.of(pageNum,pageSize));
 
         return new RecipeSearchResponse(recipe);
     }
@@ -57,6 +63,9 @@ public class FindRecipeService {
         }
         if (sortOption.trim().equalsIgnoreCase("jmt")) {
             return new OrderSpecifier<>(orderDirection, QRecipe.recipe.jmtPoint);
+        }
+        if (sortOption.trim().equalsIgnoreCase("new")) {
+            return new OrderSpecifier<>(orderDirection, QRecipe.recipe.createTime);
         }
 
         return new OrderSpecifier<>(orderDirection, QRecipe.recipe.id);

@@ -12,7 +12,11 @@ public class RecipeSearchRequest {
     private final String sortOption;
     private final String sortDirection;
 
+    private final Integer pageNum;
+    private final Integer pageSize;
+
     private final Long sandwichBaseId;
+    private final Long memberId;
     private final Boolean isWithOutCucumber;
 
     private final Double maxKcal;
