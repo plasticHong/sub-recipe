@@ -69,8 +69,8 @@ public class OauthApi {
         return new ResponseEntity<>(loginResponse,HttpStatus.OK);
     }
 
-    @Operation(summary = "카카오 redirect 포인트", description = "")
-    @RequestMapping(method = RequestMethod.POST, value = "/nickname/registration")
+    @Operation(summary = "카카오 회원 닉네임 등록", description = "")
+    @RequestMapping(method = RequestMethod.POST, value = "/registration/nickname")
     public ResponseEntity<?> getCode(@RequestBody NicknameRegistrationRequest request) {
 
         socialLoginService.nicknameRegistration(request);

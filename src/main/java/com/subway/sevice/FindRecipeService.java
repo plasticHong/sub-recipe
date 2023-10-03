@@ -4,8 +4,9 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.subway.dto.Request.RecipeSearchCondition;
 import com.subway.dto.Request.RecipeSearchRequest;
+import com.subway.dto.response.RecipeSearchResponse;
+import com.subway.dto.response.data.RecipeData;
 import com.subway.entity.QRecipe;
-import com.subway.entity.Recipe;
 import com.subway.repository.custom.CustomRecipeRepo;
 import com.subway.wrapper.CustomMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,14 @@ public class FindRecipeService {
     private final CustomMapper mapper;
 
 
-    public List<Recipe> findRecipe(RecipeSearchRequest request){
+    public RecipeSearchResponse findRecipe(RecipeSearchRequest request){
 
         OrderSpecifier<?> orderCondition = getOrderSpecifierBySortOption(request.getSortOption(), request.getSortDirection());
         RecipeSearchCondition searchCondition = mapper.map(request, RecipeSearchCondition.class);
 
-        List<Recipe> recipe = customRecipeRepo.findRecipe(orderCondition,searchCondition);
+        List<RecipeData> recipe = customRecipeRepo.findRecipe(orderCondition,searchCondition);
 
-        return recipe;
+        return new RecipeSearchResponse(recipe);
     }
 
     private OrderSpecifier<?> getOrderSpecifierBySortOption(String sortOption,String sortDirection) {

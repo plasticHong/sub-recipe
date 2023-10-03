@@ -23,7 +23,7 @@ public class RankingApi {
     @RequestMapping(method = RequestMethod.GET, value = "/member/best-worst")
     public ResponseEntity<?> getBestAndWorstMember() {
 
-        MemberRankingResponse response = memberRankingService.getBestMember();
+        MemberRankingResponse response = memberRankingService.getMemberRanking();
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

@@ -19,17 +19,15 @@ public class MemberRankingService {
     private final CustomMemberRepo memberRepo;
     private final CustomMapper mapper;
 
-    public MemberRankingResponse getBestMember() {
+    public MemberRankingResponse getMemberRanking() {
 
         List<Member> top10MemberByJmtPointDesc = memberRepo.findTop10MemberByJmtPointDesc();
         List<Member> top10MemberByRespectPointDesc = memberRepo.findTop10MemberByRespectPointDesc();
 
-        MemberRankingResponse rankingResponse = MemberRankingResponse.builder()
+        return MemberRankingResponse.builder()
                 .jmt(mapper.entityListToDtoList(top10MemberByJmtPointDesc, MemberWithJmt.class))
                 .respect(mapper.entityListToDtoList(top10MemberByRespectPointDesc, MemberWithRespect.class))
                 .build();
-
-        return rankingResponse;
     }
 
 }

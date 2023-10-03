@@ -2,10 +2,7 @@ package com.subway.api;
 
 import com.subway.dto.LoginResponse;
 import com.subway.dto.Message;
-import com.subway.dto.Request.LoginRequest;
-import com.subway.dto.Request.MemberJoinRequest;
-import com.subway.dto.Request.MemberPasswordUpdateRequest;
-import com.subway.dto.Request.TokenRefreshRequest;
+import com.subway.dto.Request.*;
 import com.subway.dto.TokenRefreshResponse;
 import com.subway.dto.response.MemberInfo;
 import com.subway.sevice.JoinService;
@@ -36,7 +33,7 @@ public class MemberApi {
     private final MemberInfoService memberInfoService;
 
     @Operation(summary = "비밀번호 변경(need authentication)", description = """
-            ## return : 
+            ## return :
                 -   Original Password validate fail : 403
                 -   Password Repeat validate fail : 400
             """)
@@ -45,8 +42,8 @@ public class MemberApi {
 
         try {
             memberInfoService.memberPasswordUpdate(request);
-        }catch (IllegalArgumentException e){
-            return new ResponseEntity<>(ResponseUtils.makeJsonFormat("message",e.getMessage()),HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(ResponseUtils.makeJsonFormat("message", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -54,9 +51,9 @@ public class MemberApi {
 
     @Operation(summary = "내 정보 (need authentication)", description = """
             #parameter - 토큰 첨부 필요 Authorization 헤더, grantType : Bearer
-            
+                        
             <hr>
-            
+                        
             #return
             - id(Long) : PK
             - nickName(String) : nickName
@@ -67,9 +64,9 @@ public class MemberApi {
         String authorization = req.getHeader("Authorization");
         MemberInfo memberInfo;
 
-        try{
+        try {
             memberInfo = memberInfoService.resolveAccessToken(authorization);
-        }catch (JwtException e){
+        } catch (JwtException e) {
             return new ResponseEntity<>(new Message(e.getMessage()), HttpStatus.FORBIDDEN);
         }
 
@@ -92,11 +89,31 @@ public class MemberApi {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @Operation(summary = "닉네임 중복 체크", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/nickname-check")
+    public ResponseEntity<?> nicknameDuplicateCheck(@RequestParam String nickname) {
+
+        boolean isDuplicate = joinService.nicknameDuplicateCheck(nickname);
+        HashMap<Object, Boolean> res = new HashMap<>();
+
+        if (isDuplicate) {
+            res.put("duplicate", true);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+
+        res.put("duplicate", false);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @Operation(summary = "회원가입", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/join")
     public ResponseEntity<?> join(@RequestBody MemberJoinRequest joinRequest) {
 
-        joinService.join(joinRequest);
+        try {
+            joinService.join(joinRequest);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(ResponseUtils.makeJsonFormat("message", e.getMessage()), HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -124,7 +141,7 @@ public class MemberApi {
         }
 
     }
-    
+
     @Operation(summary = "토큰 리프레시", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/refresh")
     public ResponseEntity<?> validateRefreshToken(@RequestBody TokenRefreshRequest req) {
@@ -137,7 +154,7 @@ public class MemberApi {
                 return new ResponseEntity<>("token is expired", HttpStatus.FORBIDDEN);
             }
 
-            return new ResponseEntity<>(token,HttpStatus.OK);
+            return new ResponseEntity<>(token, HttpStatus.OK);
 
         } catch (NoSuchElementException e) {
 

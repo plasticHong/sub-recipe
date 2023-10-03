@@ -1,11 +1,16 @@
 package com.subway.repository.custom;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.subway.dto.Request.RecipeSearchCondition;
+import com.subway.dto.response.data.RecipeData;
 import com.subway.entity.QRecipe;
-import com.subway.entity.Recipe;
+import com.subway.entity.QSandwichBase;
+import com.subway.entity.member.QMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,17 +18,34 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomRecipeRepoImpl implements CustomRecipeRepo{
+public class CustomRecipeRepoImpl implements CustomRecipeRepo {
 
     private final JPAQueryFactory queryFactory;
 
     private final QRecipe recipe = QRecipe.recipe;
+    private final QMember member = QMember.member;
+    private final QSandwichBase sandwichBase = QSandwichBase.sandwichBase;
 
     @Override
-    public List<Recipe> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition) {
+    public List<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition) {
 
-        return queryFactory.select(recipe)
+        return queryFactory.select(Projections.bean(RecipeData.class,
+                        recipe.id,
+                        recipe.title,
+                        recipe.memberId,
+                        member.nickName.as("ownerNickname"),
+                        recipe.sandwichBaseId.as("sandwichBaseId"),
+                        sandwichBase.korName.as("sandwichBaseName"),
+                        recipe.totalPrice,
+                        recipe.totalKcal,
+                        recipe.totalProtein,
+                        recipe.totalFat,
+                        recipe.jmtPoint,
+                        recipe.respectPoint
+                ))
                 .from(recipe)
+                .join(member).on(member.id.eq(recipe.memberId))
+                .join(sandwichBase).on(sandwichBase.id.eq(recipe.sandwichBaseId))
                 .orderBy(orderCondition)
                 .where(
                         recipe.useYn.isTrue(),
@@ -41,7 +63,6 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo{
 
                         loeMaxPrice(searchCondition.getMaxPrice()),
                         goeMinPrice(searchCondition.getMinPrice())
-
                 )
                 .fetch();
     }

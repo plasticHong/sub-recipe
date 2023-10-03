@@ -2,6 +2,7 @@ package com.subway.api;
 
 import com.subway.dto.Request.RecipeSearchRequest;
 import com.subway.dto.Request.SaveRecipeRequest;
+import com.subway.dto.response.RecipeSearchResponse;
 import com.subway.entity.Recipe;
 import com.subway.sevice.FavoriteRecipeService;
 import com.subway.sevice.FindRecipeService;
@@ -42,9 +43,9 @@ public class RecipeApi {
     @RequestMapping(method = RequestMethod.POST, value = "/search")
     public ResponseEntity<?> getRecipe(@RequestBody RecipeSearchRequest request) {
 
-        List<Recipe> recipe = findRecipeService.findRecipe(request);
+        RecipeSearchResponse response = findRecipeService.findRecipe(request);
 
-        return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipes",recipe),HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "레시피 즐겨찾기", description = "")
