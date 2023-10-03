@@ -51,6 +51,14 @@ public class Member {
         this.userId = userId;
     }
 
+    public void passwordUpdate(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void softDelete() {
+        this.useYn = false;
+    }
+
     public void nicknameRegistration(String nickName) {
         this.nickName = nickName;
     }

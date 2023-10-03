@@ -4,12 +4,14 @@ import com.subway.dto.LoginResponse;
 import com.subway.dto.Message;
 import com.subway.dto.Request.LoginRequest;
 import com.subway.dto.Request.MemberJoinRequest;
+import com.subway.dto.Request.MemberPasswordUpdateRequest;
 import com.subway.dto.Request.TokenRefreshRequest;
 import com.subway.dto.TokenRefreshResponse;
 import com.subway.dto.response.MemberInfo;
 import com.subway.sevice.JoinService;
 import com.subway.sevice.UserAuthenticationService;
 import com.subway.sevice.MemberInfoService;
+import com.subway.utils.ResponseUtils;
 import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +34,23 @@ public class MemberApi {
     private final UserAuthenticationService userAuthService;
     private final JoinService joinService;
     private final MemberInfoService memberInfoService;
+
+    @Operation(summary = "비밀번호 변경(need authentication)", description = """
+            ## return : 
+                -   Original Password validate fail : 403
+                -   Password Repeat validate fail : 400
+            """)
+    @RequestMapping(method = RequestMethod.POST, value = "/update/password")
+    public ResponseEntity<?> passwordUpdate(@RequestBody MemberPasswordUpdateRequest request) {
+
+        try {
+            memberInfoService.memberPasswordUpdate(request);
+        }catch (IllegalArgumentException e){
+            return new ResponseEntity<>(ResponseUtils.makeJsonFormat("message",e.getMessage()),HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @Operation(summary = "내 정보 (need authentication)", description = """
             #parameter - 토큰 첨부 필요 Authorization 헤더, grantType : Bearer

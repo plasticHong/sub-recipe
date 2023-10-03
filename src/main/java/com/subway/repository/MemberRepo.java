@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface MemberRepo extends JpaRepository<Member,Long> {
 
     Optional<Member> findByUserIdAndUseYnIsTrue(String userId);
+    Optional<Member> findByIdAndUseYnIsTrue(Long memberId);
 
 }

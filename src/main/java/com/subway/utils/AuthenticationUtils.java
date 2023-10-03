@@ -3,10 +3,12 @@ package com.subway.utils;
 import com.subway.exception.CustomAuthException;
 import com.subway.wrapper.CustomServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Slf4j
 public class AuthenticationUtils {
 
     public static Long getCurrentMemberId() {
@@ -16,7 +18,7 @@ public class AuthenticationUtils {
         try {
 
             if (idStr.trim().equalsIgnoreCase("anonymousUser")) {
-                System.out.println("anonymous user!");
+                log.info("anonymous user!");
                 return null;
             }
 

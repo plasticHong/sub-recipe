@@ -32,9 +32,8 @@ public class UserAuthenticationService {
         String rawPassword = loginRequest.getPassword();
 
         Member member = memberRepo.findByUserIdAndUseYnIsTrue(userId).orElseThrow(NoSuchElementException::new);
-        String encodedPassword = member.getPassword();
 
-        boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
+        boolean matches = memberPasswordCheck(userId,rawPassword);
 
         if (matches){
             LoginResponse loginResponse = jwtTokenMaker.makeToken(member.getId(), member.getNickName());
@@ -44,7 +43,21 @@ public class UserAuthenticationService {
 
         return null;
     }
+    public boolean memberPasswordCheck(Long memberId, String rawPassword) {
 
+        Member member = memberRepo.findByIdAndUseYnIsTrue(memberId).orElseThrow(NoSuchElementException::new);
+        String encodedPassword = member.getPassword();
+
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public boolean memberPasswordCheck(String userId, String rawPassword) {
+
+        Member member = memberRepo.findByUserIdAndUseYnIsTrue(userId).orElseThrow(NoSuchElementException::new);
+        String encodedPassword = member.getPassword();
+
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
     @Transactional
     public void refreshTokenSave(String userId, String refreshToken) {
 
@@ -55,7 +68,6 @@ public class UserAuthenticationService {
 
         boolean isExists = refreshTokenRepo.existsByUserId(userId);
 
-//               리프레시 토큰 확인, DB에 있으면 삭제 후 save
         if (isExists) {
             refreshTokenRepo.deleteByUserId(userId);
         }
