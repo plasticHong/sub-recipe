@@ -31,7 +31,7 @@ public class UserAuthenticationService {
         String userId = loginRequest.getUserId();
         String rawPassword = loginRequest.getPassword();
 
-        Member member = memberRepo.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+        Member member = memberRepo.findByUserIdAndUseYnIsTrue(userId).orElseThrow(NoSuchElementException::new);
         String encodedPassword = member.getPassword();
 
         boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);

@@ -1,6 +1,8 @@
 package com.subway.api;
 
+import com.subway.dto.response.MemberInfo;
 import com.subway.entity.Sauce;
+import com.subway.sevice.MemberInfoService;
 import com.subway.sevice.SauceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class MyController {
 
     private final SauceService sauceService;
+    private final MemberInfoService memberInfoService;
 
     @Operation(summary = "이름", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/name")
@@ -32,6 +35,15 @@ public class MyController {
         System.out.println("get-name!");
 
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @Operation(summary = "이름", description = "")
+    @RequestMapping(method = RequestMethod.GET, value = "/nick")
+    public ResponseEntity<?> getNick() {
+
+        String nickName = memberInfoService.getUserNickName("hong");
+        System.out.println("nickName = " + nickName);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @Operation(summary = "소스", description = "")

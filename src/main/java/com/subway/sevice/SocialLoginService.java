@@ -67,7 +67,7 @@ public class SocialLoginService {
 
     public LoginResponse loginSocialMember(String socialId) {
 
-        Optional<Member> byUserId = memberRepo.findByUserId(socialId);
+        Optional<Member> byUserId = memberRepo.findByUserIdAndUseYnIsTrue(socialId);
 
         if (byUserId.isPresent()) {
             Member member = byUserId.get();

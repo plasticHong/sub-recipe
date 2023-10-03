@@ -17,7 +17,7 @@ public class JoinService {
 
     public boolean userIdDuplicateCheck(String userId) {
 
-        return memberRepo.findByUserId(userId).isPresent();
+        return memberRepo.findByUserIdAndUseYnIsTrue(userId).isPresent();
     }
 
     @Transactional
@@ -28,7 +28,7 @@ public class JoinService {
 
         String userId = request.getUserId();
 
-        boolean present = memberRepo.findByUserId(userId).isPresent();
+        boolean present = memberRepo.findByUserIdAndUseYnIsTrue(userId).isPresent();
 
         if (present){
             throw new IllegalArgumentException("already exist userId");
