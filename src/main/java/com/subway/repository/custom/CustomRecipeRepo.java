@@ -13,5 +13,6 @@ import java.util.List;
 public interface CustomRecipeRepo {
 
     Page<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition, Pageable pageable);
+    Page<RecipeData> findMemberFavoriteRecipe(Long memberId,Pageable pageable);
 
 }

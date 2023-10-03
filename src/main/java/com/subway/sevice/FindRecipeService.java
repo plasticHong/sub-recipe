@@ -8,7 +8,9 @@ import com.subway.dto.response.RecipeSearchResponse;
 import com.subway.dto.response.data.RecipeData;
 import com.subway.entity.QRecipe;
 import com.subway.repository.custom.CustomRecipeRepo;
+import com.subway.utils.AuthenticationUtils;
 import com.subway.wrapper.CustomMapper;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,13 @@ public class FindRecipeService {
     private final CustomRecipeRepo customRecipeRepo;
     private final CustomMapper mapper;
 
+    public RecipeSearchResponse findSavedRecipe(Integer pageNum){
+
+        Long currentMemberId = AuthenticationUtils.getCurrentMemberId();
+        Page<RecipeData> memberFavoriteRecipe = customRecipeRepo.findMemberFavoriteRecipe(currentMemberId, PageRequest.of(pageNum, 10));
+
+        return new RecipeSearchResponse(memberFavoriteRecipe);
+    }
 
     public RecipeSearchResponse findRecipe(RecipeSearchRequest request){
 

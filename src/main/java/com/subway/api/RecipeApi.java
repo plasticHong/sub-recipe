@@ -39,13 +39,32 @@ public class RecipeApi {
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipeId",recipeId),HttpStatus.OK);
     }
 
-    @Operation(summary = "레시피 검색", description = "")
+    @Operation(summary = "레시피 검색", description = """
+            ## parameter
+                pageNum(int) : 첫 번째 페이지 0 부터 시작
+                pageSize(int) : 페이지 사이즈
+                sortOption(String)(ignoreCase) : kcal, protein, price, respect, jmt, new
+                sortDirection(String)(ignoreCase) : ASC, DESC
+            """)
     @RequestMapping(method = RequestMethod.POST, value = "/search")
     public ResponseEntity<?> getRecipe(@RequestBody RecipeSearchRequest request) {
 
         RecipeSearchResponse response = findRecipeService.findRecipe(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "자신의 즐겨찾기 레시피 가져오기", description = """
+            ## parameter
+                pageNum(int) : 첫 번째 페이지 0 부터 시작
+               
+            """)
+    @RequestMapping(method = RequestMethod.GET, value = "/favorite")
+    public ResponseEntity<?> getSavedRecipe(@RequestParam Integer pageNum) {
+
+        RecipeSearchResponse savedRecipe = findRecipeService.findSavedRecipe(pageNum);
+
+        return new ResponseEntity<>(savedRecipe,HttpStatus.OK);
     }
 
     @Operation(summary = "레시피 즐겨찾기", description = "")

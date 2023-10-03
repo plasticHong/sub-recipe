@@ -8,6 +8,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.subway.dto.Request.RecipeSearchCondition;
 import com.subway.dto.response.data.RecipeData;
+import com.subway.entity.QMemberFavoriteRecipe;
 import com.subway.entity.QRecipe;
 import com.subway.entity.QSandwichBase;
 import com.subway.entity.member.QMember;
@@ -28,6 +29,49 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
     private final QRecipe recipe = QRecipe.recipe;
     private final QMember member = QMember.member;
     private final QSandwichBase sandwichBase = QSandwichBase.sandwichBase;
+    private final QMemberFavoriteRecipe favoriteRecipe = QMemberFavoriteRecipe.memberFavoriteRecipe;
+
+
+    @Override
+    public Page<RecipeData> findMemberFavoriteRecipe(Long memberId,Pageable pageable) {
+        List<RecipeData> list = queryFactory.select(Projections.bean(RecipeData.class,
+                        recipe.id,
+                        recipe.title,
+                        recipe.memberId,
+                        member.nickName.as("ownerNickname"),
+                        recipe.sandwichBaseId,
+                        sandwichBase.korName.as("sandwichBaseName"),
+                        recipe.totalPrice,
+                        recipe.totalKcal,
+                        recipe.totalProtein,
+                        recipe.totalFat,
+                        recipe.jmtPoint,
+                        recipe.respectPoint,
+                        recipe.createTime
+                ))
+                .from(favoriteRecipe)
+                .join(recipe).on(recipe.id.eq(favoriteRecipe.recipeId))
+                .join(member).on(member.id.eq(recipe.memberId))
+                .join(sandwichBase).on(sandwichBase.id.eq(recipe.sandwichBaseId))
+                .where(
+                        recipe.useYn.isTrue(),
+                        favoriteRecipe.memberId.eq(memberId)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = queryFactory.select(recipe.count())
+                .from(favoriteRecipe)
+                .join(recipe).on(recipe.id.eq(favoriteRecipe.recipeId))
+                .where(recipe.useYn.isTrue(), favoriteRecipe.memberId.eq(memberId))
+                .fetchOne();
+
+        if (count!=null){
+            return new PageImpl<>(list,pageable,count);
+        }
+        return new PageImpl<>(list);
+    }
 
     @Override
     public Page<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition, Pageable pageable) {
@@ -72,8 +116,6 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
-        System.out.println(list.size());
 
         Long count = queryFactory.select(recipe.count())
                 .from(recipe)
