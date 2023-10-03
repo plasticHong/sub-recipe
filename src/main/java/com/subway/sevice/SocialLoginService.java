@@ -24,10 +24,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SocialLoginService {
 
+    @Value("${server.domain}")
+    private String domain;
+
     @Value("${kakao.api.key}")
     private String key;
     private final String socialIdPrefix = "kakao_";
-    private final String domain = "http://localhost:8080";
+
     private final String redirectUri = domain +
             "/oauth/login/kakao/code";
 

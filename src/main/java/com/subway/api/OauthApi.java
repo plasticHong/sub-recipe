@@ -24,6 +24,10 @@ public class OauthApi {
 
     @Value("${kakao.api.key}")
     private String key;
+
+    @Value("${server.domain}")
+    private String domain;
+
     private final SocialLoginService socialLoginService;
 
     @Operation(summary = "kakaoLogin", description = """
@@ -41,8 +45,6 @@ public class OauthApi {
     @ApiResponse(responseCode = "303", description = "Register your nickname")
     @RequestMapping(method = RequestMethod.GET, value = "/login/kakao")
     public void redirect(HttpServletResponse response) throws IOException {
-
-        String domain = "http://localhost:8080";
 
         String url = "https://kauth.kakao.com/oauth/authorize?client_id=" +
                 key +
