@@ -1,10 +1,9 @@
 package com.subway.repository.custom;
 
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.subway.dto.Request.RecipeSearchCondition;
 import com.subway.dto.response.data.RecipeData;
@@ -34,21 +33,7 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
 
     @Override
     public Page<RecipeData> findMemberFavoriteRecipe(Long memberId,Pageable pageable) {
-        List<RecipeData> list = queryFactory.select(Projections.bean(RecipeData.class,
-                        recipe.id,
-                        recipe.title,
-                        recipe.memberId,
-                        member.nickName.as("ownerNickname"),
-                        recipe.sandwichBaseId,
-                        sandwichBase.korName.as("sandwichBaseName"),
-                        recipe.totalPrice,
-                        recipe.totalKcal,
-                        recipe.totalProtein,
-                        recipe.totalFat,
-                        recipe.jmtPoint,
-                        recipe.respectPoint,
-                        recipe.createTime
-                ))
+        List<RecipeData> list = selectRecipeData()
                 .from(favoriteRecipe)
                 .join(recipe).on(recipe.id.eq(favoriteRecipe.recipeId))
                 .join(member).on(member.id.eq(recipe.memberId))
@@ -76,21 +61,7 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
     @Override
     public Page<RecipeData> findRecipe(OrderSpecifier<?> orderCondition, RecipeSearchCondition searchCondition, Pageable pageable) {
 
-        List<RecipeData> list = queryFactory.select(Projections.bean(RecipeData.class,
-                        recipe.id,
-                        recipe.title,
-                        recipe.memberId,
-                        member.nickName.as("ownerNickname"),
-                        recipe.sandwichBaseId,
-                        sandwichBase.korName.as("sandwichBaseName"),
-                        recipe.totalPrice,
-                        recipe.totalKcal,
-                        recipe.totalProtein,
-                        recipe.totalFat,
-                        recipe.jmtPoint,
-                        recipe.respectPoint,
-                        recipe.createTime
-                ))
+        List<RecipeData> list = selectRecipeData()
                 .from(recipe)
                 .join(member).on(member.id.eq(recipe.memberId))
                 .join(sandwichBase).on(sandwichBase.id.eq(recipe.sandwichBaseId))
@@ -141,6 +112,25 @@ public class CustomRecipeRepoImpl implements CustomRecipeRepo {
             return new PageImpl<>(list,pageable,count);
         }
         return new PageImpl<>(list);
+    }
+
+    private JPAQuery<RecipeData> selectRecipeData() {
+        return queryFactory.select(Projections.bean(RecipeData.class,
+                        recipe.id,
+                        recipe.title,
+                        recipe.memberId,
+                        member.nickName.as("ownerNickname"),
+                        recipe.sandwichBaseId,
+                        sandwichBase.korName.as("sandwichBaseName"),
+                        sandwichBase.image.as("sandwichBaseImagePath"),
+                        recipe.totalPrice,
+                        recipe.totalKcal,
+                        recipe.totalProtein,
+                        recipe.totalFat,
+                        recipe.jmtPoint,
+                        recipe.respectPoint,
+                        recipe.createTime
+                ));
     }
 
     private BooleanExpression withOutCucumber(Boolean isWithOutCucumber) {

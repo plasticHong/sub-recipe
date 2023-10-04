@@ -20,6 +20,8 @@ public class RecipeData {
     private Long sandwichBaseId;
     private String sandwichBaseName;
 
+    private String sandwichBaseImagePath;
+
     private Integer totalPrice;
     private Double totalKcal;
     private Double totalProtein;
