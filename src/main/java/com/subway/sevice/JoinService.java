@@ -31,8 +31,9 @@ public class JoinService {
 
         String userId = request.getUserId();
 
-        boolean userIdPresent = memberRepo.findByUserId(userId).isPresent();
-        boolean nicknamePresent = memberRepo.findByNickName(request.getNickName()).isPresent();
+        boolean userIdPresent = userIdDuplicateCheck(userId);
+        boolean nicknamePresent = nicknameDuplicateCheck(request.getNickName());
+
         if (userIdPresent){
             throw new IllegalArgumentException("already exist userId");
         }
@@ -40,7 +41,7 @@ public class JoinService {
             throw new IllegalArgumentException("already exist nickname");
         }
 
-        Member member  = Member.builder()
+        Member member = Member.builder()
                 .userId(userId)
                 .nickName(request.getNickName())
                 .password(encodedPassword)

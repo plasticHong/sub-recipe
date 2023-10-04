@@ -33,7 +33,7 @@ public class UserAuthenticationService {
 
         Member member = memberRepo.findByUserIdAndUseYnIsTrue(userId).orElseThrow(NoSuchElementException::new);
 
-        boolean matches = memberPasswordValidate(userId,rawPassword);
+        boolean matches = memberPasswordValidate(member,rawPassword);
 
         if (matches){
             LoginResponse loginResponse = jwtTokenMaker.makeToken(member.getId(), member.getNickName());
@@ -51,13 +51,13 @@ public class UserAuthenticationService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    public boolean memberPasswordValidate(String userId, String rawPassword) {
+    public boolean memberPasswordValidate(Member member, String rawPassword) {
 
-        Member member = memberRepo.findByUserIdAndUseYnIsTrue(userId).orElseThrow(NoSuchElementException::new);
         String encodedPassword = member.getPassword();
 
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
+
     @Transactional
     public void refreshTokenSave(String userId, String refreshToken) {
 
@@ -86,15 +86,6 @@ public class UserAuthenticationService {
         TokenRefreshResponse createdAccessToken = jwtTokenMaker.validateRefreshToken(refreshToken);
 
         refreshTokenSave(refreshToken.getUserId(),createdAccessToken.getRefreshToken());
-
-        return createRefreshJson(createdAccessToken);
-    }
-
-    public TokenRefreshResponse createRefreshJson(TokenRefreshResponse createdAccessToken){
-
-        if(createdAccessToken == null){
-            return null;
-        }
 
         return createdAccessToken;
     }

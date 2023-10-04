@@ -29,7 +29,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class MemberApi {
 
-    private final UserAuthenticationService userAuthService;
     private final JoinService joinService;
     private final MemberInfoService memberInfoService;
     private final MemberAccountService memberAccountService;
@@ -132,51 +131,5 @@ public class MemberApi {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @Operation(summary = "로그인", description = "")
-    @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-
-        HashMap<Object, Object> res = new HashMap<>();
-
-        try {
-
-            LoginResponse token = userAuthService.login(loginRequest);
-
-            if (token == null) {
-
-                res.put("message", "wrong password");
-                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
-            }
-
-            return new ResponseEntity<>(token, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            res.put("message", "wrong userId");
-            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
-    @Operation(summary = "토큰 리프레시", description = "")
-    @RequestMapping(method = RequestMethod.POST, value = "/refresh")
-    public ResponseEntity<?> validateRefreshToken(@RequestBody TokenRefreshRequest req) {
-
-        try {
-
-            TokenRefreshResponse token = userAuthService.validateRefreshToken(req.getRefreshToken());
-
-            if (token == null) {
-                return new ResponseEntity<>("token is expired", HttpStatus.FORBIDDEN);
-            }
-
-            return new ResponseEntity<>(token, HttpStatus.OK);
-
-        } catch (NoSuchElementException e) {
-
-            return new ResponseEntity<>("invalid token", HttpStatus.FORBIDDEN);
-        }
-
-    }
-
 
 }
