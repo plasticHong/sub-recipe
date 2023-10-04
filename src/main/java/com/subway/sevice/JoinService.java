@@ -16,11 +16,11 @@ public class JoinService {
     private final PasswordEncoder passwordEncoder;
 
     public boolean userIdDuplicateCheck(String userId) {
-        return memberRepo.findByUserIdAndUseYnIsTrue(userId).isPresent();
+        return memberRepo.findByUserId(userId).isPresent();
     }
 
     public boolean nicknameDuplicateCheck(String nickname) {
-        return memberRepo.findByNickNameAndUseYnIsTrue(nickname).isPresent();
+        return memberRepo.findByNickName(nickname).isPresent();
     }
 
     @Transactional
@@ -31,8 +31,8 @@ public class JoinService {
 
         String userId = request.getUserId();
 
-        boolean userIdPresent = memberRepo.findByUserIdAndUseYnIsTrue(userId).isPresent();
-        boolean nicknamePresent = memberRepo.findByNickNameAndUseYnIsTrue(request.getNickName()).isPresent();
+        boolean userIdPresent = memberRepo.findByUserId(userId).isPresent();
+        boolean nicknamePresent = memberRepo.findByNickName(request.getNickName()).isPresent();
         if (userIdPresent){
             throw new IllegalArgumentException("already exist userId");
         }

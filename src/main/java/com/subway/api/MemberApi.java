@@ -6,6 +6,7 @@ import com.subway.dto.Request.*;
 import com.subway.dto.TokenRefreshResponse;
 import com.subway.dto.response.MemberInfo;
 import com.subway.sevice.JoinService;
+import com.subway.sevice.MemberAccountService;
 import com.subway.sevice.UserAuthenticationService;
 import com.subway.sevice.MemberInfoService;
 import com.subway.utils.ResponseUtils;
@@ -31,6 +32,7 @@ public class MemberApi {
     private final UserAuthenticationService userAuthService;
     private final JoinService joinService;
     private final MemberInfoService memberInfoService;
+    private final MemberAccountService memberAccountService;
 
     @Operation(summary = "비밀번호 변경(need authentication)", description = """
             ## return :
@@ -48,6 +50,19 @@ public class MemberApi {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Operation(summary = "회원 탈퇴(need authentication)", description = """
+            ## return :
+                -   Password validate fail : 403
+            """)
+    @RequestMapping(method = RequestMethod.POST, value = "/service-out")
+    public ResponseEntity<?> serviceOut(@RequestBody MemberOutRequest request) {
+
+        memberAccountService.MemberServiceOut(request.getPassword());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @Operation(summary = "내 정보 (need authentication)", description = """
             #parameter - 토큰 첨부 필요 Authorization 헤더, grantType : Bearer

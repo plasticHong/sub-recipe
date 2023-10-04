@@ -3,6 +3,9 @@ package com.subway.entity.member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Entity
 @Getter
 @ToString
@@ -33,6 +36,12 @@ public class Member {
     @Column(name = "use_yn")
     private Boolean useYn;
 
+    @Column(name = "create_time")
+    private LocalDateTime createTime;
+
+    @Column(name = "delete_time")
+    private LocalDateTime deleteTime;
+
     @Builder
     public Member(String userId, String password, String nickName) {
         this.userId = userId;
@@ -45,6 +54,7 @@ public class Member {
         this.useYn = true;
         this.jmtPoint = 0;
         this.respectPoint = 0;
+        this.createTime = LocalDateTime.now();
     }
 
     public Member(String userId) {
@@ -57,6 +67,7 @@ public class Member {
 
     public void softDelete() {
         this.useYn = false;
+        this.deleteTime = LocalDateTime.now();
     }
 
     public void nicknameRegistration(String nickName) {

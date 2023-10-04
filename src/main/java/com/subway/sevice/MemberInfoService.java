@@ -31,7 +31,7 @@ public class MemberInfoService {
         final String newPassword = req.getNewPassword();
         final String newPasswordRepeat = req.getNewPasswordRepeat();
 
-        boolean passwordValidate = authenticationService.memberPasswordCheck(currentMemberId, originalPassword);
+        boolean passwordValidate = authenticationService.memberPasswordValidate(currentMemberId, originalPassword);
 
         if (!passwordValidate){
             throw new CustomAuthException("check password");

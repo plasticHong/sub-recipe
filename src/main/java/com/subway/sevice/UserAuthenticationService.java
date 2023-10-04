@@ -33,7 +33,7 @@ public class UserAuthenticationService {
 
         Member member = memberRepo.findByUserIdAndUseYnIsTrue(userId).orElseThrow(NoSuchElementException::new);
 
-        boolean matches = memberPasswordCheck(userId,rawPassword);
+        boolean matches = memberPasswordValidate(userId,rawPassword);
 
         if (matches){
             LoginResponse loginResponse = jwtTokenMaker.makeToken(member.getId(), member.getNickName());
@@ -43,7 +43,7 @@ public class UserAuthenticationService {
 
         return null;
     }
-    public boolean memberPasswordCheck(Long memberId, String rawPassword) {
+    public boolean memberPasswordValidate(Long memberId, String rawPassword) {
 
         Member member = memberRepo.findByIdAndUseYnIsTrue(memberId).orElseThrow(NoSuchElementException::new);
         String encodedPassword = member.getPassword();
@@ -51,7 +51,7 @@ public class UserAuthenticationService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    public boolean memberPasswordCheck(String userId, String rawPassword) {
+    public boolean memberPasswordValidate(String userId, String rawPassword) {
 
         Member member = memberRepo.findByUserIdAndUseYnIsTrue(userId).orElseThrow(NoSuchElementException::new);
         String encodedPassword = member.getPassword();

@@ -4,13 +4,18 @@ import com.subway.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface MemberRepo extends JpaRepository<Member,Long> {
 
     Optional<Member> findByUserIdAndUseYnIsTrue(String userId);
+    Optional<Member> findByUserId(String userId);
     Optional<Member> findByNickNameAndUseYnIsTrue(String nickname);
+    Optional<Member> findByNickName(String nickname);
     Optional<Member> findByIdAndUseYnIsTrue(Long memberId);
+    List<Member> findMemberByDeleteTimeBeforeAndUseYnIsFalse(LocalDateTime dateTime);
 
 }
