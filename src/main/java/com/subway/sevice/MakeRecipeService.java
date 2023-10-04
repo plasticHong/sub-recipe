@@ -6,6 +6,7 @@ import com.subway.entity.Recipe;
 import com.subway.entity.Usable;
 import com.subway.entity.mapping.RecipeExtraOption;
 import com.subway.entity.mapping.RecipeIndividualMeat;
+import com.subway.eum.S3Location;
 import com.subway.exception.CustomAuthException;
 import com.subway.repository.RecipeRepo;
 import com.subway.repository.mapping.RecipeExtraOptionRepo;
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.sasl.AuthenticationException;
 import java.util.List;
@@ -38,12 +40,15 @@ public class MakeRecipeService {
 
     private final RecipeExtraOptionRepo recipeExtraOptionRepo;
     private final RecipeIndividualMeatRepo recipeIndividualMeatRepo;
-
+    private final ImageStoreService imageStoreService;
 
     @Transactional
-    public Long saveRecipe(SaveRecipeRequest request) {
+    public Long saveRecipe(SaveRecipeRequest request, MultipartFile img) {
 
         Recipe recipeEntity = makeRecipeEntity(request);
+
+        String imgPath = imageStoreService.saveImgToS3(img, S3Location.RECIPE);
+        recipeEntity.setImg(imgPath);
 
         Long savedRecipeId = recipeRepo.save(recipeEntity).getId();
 

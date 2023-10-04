@@ -104,6 +104,9 @@ public class Recipe{
     @Column(name = "respect_point")
     private Integer respectPoint;
 
+    @Column(name = "img")
+    private String img;
+
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
@@ -112,6 +115,10 @@ public class Recipe{
 
     @Column(name = "use_yn")
     private Boolean useYn;
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     @PrePersist
     public void onPrePersist() {

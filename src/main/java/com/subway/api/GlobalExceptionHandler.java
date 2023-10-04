@@ -1,6 +1,7 @@
 package com.subway.api;
 
 import com.subway.exception.CustomAuthException;
+import com.subway.exception.CustomContentTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.NoSuchElementException;
 
-@ControllerAdvice()
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomAuthException.class)
@@ -21,5 +22,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request! check args: " + e.getMessage());
     }
 
+    @ExceptionHandler(CustomContentTypeException.class)
+    public ResponseEntity<String> handleContentTypeException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unsupported content type");
+    }
 }
 

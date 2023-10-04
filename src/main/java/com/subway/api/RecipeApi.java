@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,9 +33,9 @@ public class RecipeApi {
 
     @Operation(summary = "레시피 생성", description = "")
     @RequestMapping(method = RequestMethod.POST, value = "/save")
-    public ResponseEntity<?> makeRecipe(@RequestBody SaveRecipeRequest request) {
+    public ResponseEntity<?> makeRecipe(@RequestPart SaveRecipeRequest request, @RequestPart MultipartFile file) {
 
-        Long recipeId = makeRecipeService.saveRecipe(request);
+        Long recipeId = makeRecipeService.saveRecipe(request,file);
 
         return new ResponseEntity<>(ResponseUtils.makeJsonFormat("recipeId",recipeId),HttpStatus.OK);
     }

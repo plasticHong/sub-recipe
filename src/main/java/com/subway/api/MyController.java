@@ -1,8 +1,9 @@
 package com.subway.api;
 
-import com.subway.dto.response.MemberInfo;
 import com.subway.entity.Sauce;
+import com.subway.sevice.ImageStoreService;
 import com.subway.sevice.MemberInfoService;
+import com.subway.eum.S3Location;
 import com.subway.sevice.SauceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,17 @@ public class MyController {
 
     private final SauceService sauceService;
     private final MemberInfoService memberInfoService;
+    private final ImageStoreService imageStoreService;
+
+    @Operation(summary = "이름", description = "")
+    @RequestMapping(method = RequestMethod.POST, value = "/test")
+    public ResponseEntity<?> test(@RequestPart MultipartFile file) {
+
+        String path = imageStoreService.saveImgToS3(file, S3Location.PROFILE);
+        System.out.println("path = " + path);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @Operation(summary = "이름", description = "")
     @RequestMapping(method = RequestMethod.GET, value = "/name")
