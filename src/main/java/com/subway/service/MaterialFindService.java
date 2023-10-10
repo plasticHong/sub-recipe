@@ -1,4 +1,4 @@
-package com.subway.sevice;
+package com.subway.service;
 
 import com.subway.dto.response.*;
 import com.subway.dto.response.data.*;

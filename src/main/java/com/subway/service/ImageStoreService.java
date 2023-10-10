@@ -1,4 +1,4 @@
-package com.subway.sevice;
+package com.subway.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;

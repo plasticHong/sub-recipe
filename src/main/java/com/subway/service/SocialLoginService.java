@@ -1,4 +1,4 @@
-package com.subway.sevice;
+package com.subway.service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

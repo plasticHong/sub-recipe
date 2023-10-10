@@ -1,4 +1,4 @@
-package com.subway.sevice;
+package com.subway.service;
 
 import com.subway.dto.Request.SaveRecipeRequest;
 import com.subway.dto.Request.data.RecipeData;
@@ -74,7 +74,7 @@ public class MakeRecipeService {
 
             individualMeatIds.forEach(id -> {
                 RecipeIndividualMeat entity = new RecipeIndividualMeat(recipeId, id);
-                    recipeIndividualMeatRepo.save(entity);
+                recipeIndividualMeatRepo.save(entity);
             });
         }
 

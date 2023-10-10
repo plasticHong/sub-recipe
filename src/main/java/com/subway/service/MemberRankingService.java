@@ -1,4 +1,4 @@
-package com.subway.sevice;
+package com.subway.service;
 
 import com.subway.dto.response.MemberRankingResponse;
 import com.subway.dto.response.data.MemberWithJmt;

@@ -1,4 +1,4 @@
-package com.subway.sevice;
+package com.subway.service;
 
 import com.subway.entity.MemberFavoriteRecipe;
 import com.subway.repository.mapping.MemberFavoriteRecipesRepo;

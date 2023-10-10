@@ -1,4 +1,4 @@
-package com.subway.sevice;
+package com.subway.service;
 
 import com.subway.entity.member.Member;
 import com.subway.exception.CustomAuthException;
