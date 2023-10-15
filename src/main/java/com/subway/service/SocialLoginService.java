@@ -136,8 +136,7 @@ public class SocialLoginService {
         if (statusCode.is2xxSuccessful() && body != null) {
 
             JsonObject asJsonObject = JsonParser.parseString(body).getAsJsonObject();
-            String id = asJsonObject.get("id").getAsString();
-            return id;
+            return asJsonObject.get("id").getAsString();
         } else {
             System.out.println("somethings wrong... status code : " + statusCode);
         }

@@ -1,7 +1,7 @@
 package com.subway.api;
 
 import com.subway.dto.response.MemberRankingResponse;
-import com.subway.sevice.MemberRankingService;
+import com.subway.service.MemberRankingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

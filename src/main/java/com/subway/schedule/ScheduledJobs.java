@@ -1,8 +1,6 @@
 package com.subway.schedule;
 
-import com.subway.api.MemberApi;
-import com.subway.sevice.MemberAccountService;
-import com.subway.sevice.MemberInfoService;
+import com.subway.service.MemberAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;

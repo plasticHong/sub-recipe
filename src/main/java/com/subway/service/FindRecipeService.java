@@ -54,7 +54,6 @@ public class FindRecipeService {
         RecipeOwnerData recipeOwnerData = getMaterialInfo(memberRepo, memberId, RecipeOwnerData.class);
         recipeDetailResponse.setOwnerData(recipeOwnerData);
 
-
         Long sandwichBaseId = recipe.getSandwichBaseId();
         SandwichBaseData sandwichBaseData = getMaterialInfo(sandwichBaseRepo, sandwichBaseId, SandwichBaseData.class);
         recipeDetailResponse.setSandwichBaseData(sandwichBaseData);
@@ -79,7 +78,7 @@ public class FindRecipeService {
         return recipeDetailResponse;
     }
 
-    private <T,U> U getMaterialInfo(JpaRepository<T, Long> repo, Long id, Class<U> dtoClass) {
+    private <T,U extends RecipeResource> U getMaterialInfo(JpaRepository<T, Long> repo, Long id, Class<U> dtoClass) {
 
         if(id==null){
             return null;
@@ -90,7 +89,7 @@ public class FindRecipeService {
         return mapper.map(entity, dtoClass);
     }
 
-    private <T,U> List<U> getMaterialInfoList(JpaRepository<T, Long> repo, List<Long> ids, Class<U> dtoClass) {
+    private <T,U extends RecipeResource> List<U> getMaterialInfoList(JpaRepository<T, Long> repo, List<Long> ids, Class<U> dtoClass) {
 
         if(ids==null){
             return null;

@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Getter
@@ -145,7 +147,7 @@ public class Recipe{
         this.totalProtein = totalProtein;
         this.totalFat = totalFat;
 
-        setExceptionVeggies(veggieIds);
+        setVeggies(veggieIds);
         setSauces(sauceIds);
     }
 
@@ -162,7 +164,7 @@ public class Recipe{
         this.deletedTime = LocalDateTime.now();
     }
 
-    private void setExceptionVeggies(List<Long> veggieIds) {
+    private void setVeggies(List<Long> veggieIds) {
 
         int length = veggieIds.size();
 
@@ -212,6 +214,33 @@ public class Recipe{
         }
         this.sauceId3 = sauceIds.get(2);
 
+    }
+
+    public List<Long> getVeggieIds() {
+
+        List<Long> veggieIds = new ArrayList<>();
+
+        Optional.ofNullable(this.veggie1).ifPresent(veggieIds::add);
+        Optional.ofNullable(this.veggie2).ifPresent(veggieIds::add);
+        Optional.ofNullable(this.veggie3).ifPresent(veggieIds::add);
+        Optional.ofNullable(this.veggie4).ifPresent(veggieIds::add);
+        Optional.ofNullable(this.veggie5).ifPresent(veggieIds::add);
+        Optional.ofNullable(this.veggie6).ifPresent(veggieIds::add);
+        Optional.ofNullable(this.veggie7).ifPresent(veggieIds::add);
+        Optional.ofNullable(this.veggie8).ifPresent(veggieIds::add);
+
+        return veggieIds;
+    }
+
+    public List<Long> getSauceIds() {
+
+        List<Long> sauceIds = new ArrayList<>();
+
+        Optional.ofNullable(this.sauceId1).ifPresent(sauceIds::add);
+        Optional.ofNullable(this.sauceId2).ifPresent(sauceIds::add);
+        Optional.ofNullable(this.sauceId3).ifPresent(sauceIds::add);
+
+        return sauceIds;
     }
 
 }

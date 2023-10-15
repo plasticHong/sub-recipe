@@ -1,34 +1,51 @@
 package com.subway.dto.Request;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
 @ToString
+@NoArgsConstructor
 public class RecipeSearchRequest {
 
-    private final String sortOption;
-    private final String sortDirection;
+    private  String sortOption;
+    private  String sortDirection;
 
-    private final Integer pageNum;
-    private final Integer pageSize;
+    private  Integer pageNum;
+    private  Integer pageSize;
 
-    private final Long sandwichBaseId;
-    private final Long memberId;
-    private final Boolean isWithOutCucumber;
+    private  Long sandwichBaseId;
+    private  Long memberId;
+    private  Boolean isWithOutCucumber;
 
-    private final Double maxKcal;
-    private final Double minKcal;
+    private  Double maxKcal;
+    private  Double minKcal;
 
-    private final Integer maxPrice;
-    private final Integer minPrice;
+    private  Integer maxPrice;
+    private  Integer minPrice;
 
-    private final Double maxFat;
-    private final Double minFat;
+    private  Double maxFat;
+    private  Double minFat;
 
-    private final Double maxProtein;
-    private final Double minProtein;
+    private  Double maxProtein;
+    private  Double minProtein;
 
+
+    @Builder
+    public RecipeSearchRequest(String sortOption, String sortDirection, Integer pageNum, Integer pageSize, Long sandwichBaseId, Long memberId, Boolean isWithOutCucumber, Double maxKcal, Double minKcal, Integer maxPrice, Integer minPrice, Double maxFat, Double minFat, Double maxProtein, Double minProtein) {
+        this.sortOption = sortOption;
+        this.sortDirection = sortDirection;
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.sandwichBaseId = sandwichBaseId;
+        this.memberId = memberId;
+        this.isWithOutCucumber = isWithOutCucumber;
+        this.maxKcal = maxKcal;
+        this.minKcal = minKcal;
+        this.maxPrice = maxPrice;
+        this.minPrice = minPrice;
+        this.maxFat = maxFat;
+        this.minFat = minFat;
+        this.maxProtein = maxProtein;
+        this.minProtein = minProtein;
+    }
 }

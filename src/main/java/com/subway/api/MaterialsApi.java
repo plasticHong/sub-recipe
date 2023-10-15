@@ -1,7 +1,7 @@
 package com.subway.api;
 
 import com.subway.dto.response.*;
-import com.subway.sevice.MaterialFindService;
+import com.subway.service.MaterialFindService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

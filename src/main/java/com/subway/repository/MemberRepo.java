@@ -14,8 +14,8 @@ public interface MemberRepo extends JpaRepository<Member,Long> {
     Optional<Member> findByUserIdAndUseYnIsTrue(String userId);
     Optional<Member> findByUserId(String userId);
     Optional<Member> findByNickNameAndUseYnIsTrue(String nickname);
-    Optional<Member> findByNickName(String nickname);
     Optional<Member> findByIdAndUseYnIsTrue(Long memberId);
+    Optional<Member> findByNickName(String nickname);
     List<Member> findMemberByDeleteTimeBeforeAndUseYnIsFalse(LocalDateTime dateTime);
 
 }

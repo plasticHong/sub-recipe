@@ -1,9 +1,12 @@
 package com.subway.dto.response.data;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
-public class BreadData {
+@ToString
+public class BreadData extends RecipeResource{
+
 
     private Long id;
 

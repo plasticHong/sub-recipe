@@ -1,10 +1,10 @@
 package com.subway.api;
 
 import com.subway.entity.Sauce;
-import com.subway.sevice.ImageStoreService;
-import com.subway.sevice.MemberInfoService;
+import com.subway.service.ImageStoreService;
+import com.subway.service.MemberInfoService;
 import com.subway.eum.S3Location;
-import com.subway.sevice.SauceService;
+import com.subway.service.SauceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
