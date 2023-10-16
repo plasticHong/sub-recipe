@@ -4,12 +4,16 @@ import com.subway.dto.Request.RecipeSearchRequest;
 import com.subway.dto.Request.SaveRecipeRequest;
 import com.subway.dto.response.RecipeDetailResponse;
 import com.subway.dto.response.RecipeSearchResponse;
+import com.subway.dto.response.data.RecipeData;
 import com.subway.service.FavoriteRecipeService;
 import com.subway.service.FindRecipeService;
 import com.subway.service.MakeRecipeService;
 import com.subway.service.RecipeEvaluateService;
 import com.subway.utils.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,38 +49,9 @@ public class RecipeApi {
                 sortOption(String)(ignoreCase) : kcal, protein, price, respect, jmt, new
                 sortDirection(String)(ignoreCase) : ASC, DESC
             """)
+    @ApiResponse(responseCode = "200",content = @Content(schema = @Schema(implementation = RecipeData.class)))
     @RequestMapping(method = RequestMethod.GET, value = "/search")
-    public ResponseEntity<?> getRecipe(@RequestParam(required = false) String sortOption,
-                                       @RequestParam(required = false) String sortDirection,
-                                       @RequestParam(required = false) Integer pageNum,
-                                       @RequestParam(required = false) Integer pageSize,
-                                       @RequestParam(required = false) Long sandwichBaseId,
-                                       @RequestParam(required = false) Boolean isWithOutCucumber,
-                                       @RequestParam(required = false) Double maxKcal,
-                                       @RequestParam(required = false) Double minKcal,
-                                       @RequestParam(required = false) Integer maxPrice,
-                                       @RequestParam(required = false) Integer minPrice,
-                                       @RequestParam(required = false) Double maxFat,
-                                       @RequestParam(required = false) Double minFat,
-                                       @RequestParam(required = false) Double maxProtein,
-                                       @RequestParam(required = false)  Double minProtein) {
-
-        RecipeSearchRequest request = RecipeSearchRequest.builder()
-                .sortDirection(sortDirection)
-                .sortOption(sortOption)
-                .pageNum(pageNum)
-                .pageSize(pageSize)
-                .sandwichBaseId(sandwichBaseId)
-                .isWithOutCucumber(isWithOutCucumber)
-                .maxKcal(maxKcal)
-                .minKcal(minKcal)
-                .maxPrice(maxPrice)
-                .minPrice(minPrice)
-                .maxFat(maxFat)
-                .minFat(minFat)
-                .maxProtein(maxProtein)
-                .minProtein(minProtein)
-                .build();
+    public ResponseEntity<?> getRecipe(@ModelAttribute RecipeSearchRequest request) {
 
         System.out.println("request = " + request);
 
